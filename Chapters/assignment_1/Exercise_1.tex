@@ -1,0 +1,391 @@
+\documentclass[../main.tex]{subfiles}
+
+\begin{document}
+\begin{CJK*}{UTF8}{gbsn}
+
+\section*{Exercice 1}
+
+Soit $X = (X_1, \cdots, X_n)$ un échantillon de $P_{\theta} = \text{Bernoulli}(\theta)$.
+Le paramètre $\theta \in [0,1]$ est inconnu.
+Fixer un niveau $\alpha \in (0,1)$.
+On écrit $\overline{X} = \frac{1}{n} \sum_{i=1}^n X_i$ et
+ $c (\theta)$ pour la plus petite nombre $k \in \{0, \cdots, n\}$ telle que
+$P_{\theta} \curly{X_1 + \cdots X_n \leqslant k} \geqslant 1-\alpha$. 
+On construit trois régions de confiances suivantes pour $\theta$ :
+
+\begin{equation*}
+    R_1(X) = \curly{\theta \in [0,1] \mid \overline{X} - \theta \leqslant z_{\alpha} \sqrt{\frac{\theta (1- \theta)}{n}}}
+\end{equation*}
+\begin{equation*}
+    R_2(X) = \curly{\theta \in [0,1] \mid \overline{X} - \theta \leqslant z_{\alpha} \sqrt{\frac{\overline{X} (1- \overline{X})}{n}}}
+\end{equation*}
+\begin{equation*}
+    R_3(X) = \curly{\theta \in [0,1] \mid n \overline{X} \leqslant c(\theta) }
+\end{equation*}
+
+Ici $z_{\alpha} \in \mathbb{R}$ est choisie telle que $P\curly{Z \leqslant z_{\alpha}} = 1-\alpha$, 
+où $Z$ est une variable aléatoire qui suit la loi normale centrée réduite.
+
+
+Complétez les tâches suivantes :
+
+\begin{enumerate}
+    \item Tracez $c(\theta)$ pour les $\theta \in \{\frac{i}{M}\}_{i=0}^M $.
+    \item Démontrez que $\frac{1}{n}\sum_{i=1}^{n} (x_i - \overline{x})^2 = \overline{x}(1-\overline{x})$ si 
+    $x_i \in \{0,1\}$ pour $i \in \{1, \cdots, n\}$. Ici $\overline{x} = \frac{1}{n} \sum_{i=1}^n x_i$.
+    \item Étant donné $X$, résolvez pour $\theta$ dans $R_1(X)$, $R_2(X)$ et $R_3(X)$. Concluez que toutes les trois régions 
+    sont intervalles.
+    \item Pour $k \in \{1,2,3\}$, calculez et tracez 
+    $P_{\theta} \curly{\theta \in R_k}$ pour les $\theta \in \{\frac{i}{M}\}_{i=0}^M$.
+\end{enumerate}
+
+Utilisez $n = 30$, $\alpha = 0.1$ et $M = 1000$ pour toutes les simulations. 
+
+\paragraph{Solution}
+
+On fait les démonstrations avant les simulations.
+D'abord, soit $x_i \in \{0,1\}$ pour $i \in \{1, \cdots, n\}$. 
+On a $x_i^2 = x_i$ pour tout $i$ et :
+
+\begin{equation*}
+    \frac{1}{n}\sum_{i = 1}^{n} (x_i - \overline{x})^2 = \frac{1}{n}\sum_{i = 1}^{n} (x_i^2 - 2 x_i \overline{x} + \overline{x}^2) =
+    \overline{x} - \overline{x}^2 = \overline{x}(1 - \overline{x})
+\end{equation*}
+
+Étant observé $X=(x_1, \cdots, x_n)$, on donne les formes explicites pour les trois régions. 
+$R_1(X)$ donne une inégalité quadratique. Il faut résoudre d'abord 
+$\overline{x} - \theta = \frac{z_{\alpha}}{\sqrt{n}} \sqrt{\theta (1- \theta)}$.
+Les racines sont :
+
+\begin{equation*}
+    \theta = \frac{2n \overline{x} + z_{\alpha}^2 \pm \sqrt{z_{\alpha}^4 + 4n z_{\alpha}^2 \overline{x} - 4n z_{\alpha}^2 \overline{x}^2}}{2(n+z_{\alpha}^2)}
+\end{equation*}
+
+L'existence de ces racines dépend sur la valeur de $\overline{x}$, alors un autre quadratique. Les racines sont :
+
+\begin{equation*}
+    \overline{x} = \frac{n \pm \sqrt{n^2 + z_{\alpha}^2 n}}{2n } 
+\end{equation*}
+
+Alors, les racines de $\theta$ existe si 
+$\overline{x} \in \squared{\frac{n - \sqrt{n^2 + z_{\alpha}^2 n}}{2n }, \frac{n + \sqrt{n^2 + z_{\alpha}^2 n}}{2n }} \supset [0,1]$.
+Un regard aux graphes des fonctions $\overline{x} - \theta$ et $\frac{z_{\alpha}}{\sqrt{n}} \sqrt{\theta (1- \theta)}$
+montre que ces deux fonctions se croise deux fois si et seulement si 
+$\overline{x} \in \squared{ 1, \frac{n + \sqrt{n^2 + z_{\alpha}^2 n}}{2n } }$, et se croise exactement une fois 
+quand $\theta = 
+\frac{2n \overline{x} + z_{\alpha}^2 - \sqrt{z_{\alpha}^4 + 4n z_{\alpha}^2 \overline{x} - 4n z_{\alpha}^2 \overline{x}^2}}{2(n+z_{\alpha}^2)}$
+sinon. Alors :
+
+\begin{equation*}
+    R_1(X) = 
+    \begin{cases}
+        [0,1] \tab[9.8cm] \overline{X} \leqslant 0 \\
+        \squared{\frac{2n \overline{x} + z_{\alpha}^2 - \sqrt{z_{\alpha}^4 + 
+        4n z_{\alpha}^2 \overline{x} - 4n z_{\alpha}^2 \overline{x}^2}}{2(n+z_{\alpha}^2)}, 1} \tab[5.4cm] \overline{X} \in [0,1] \\
+        \squared{\frac{2n \overline{x} + z_{\alpha}^2 - \sqrt{z_{\alpha}^4 + 4n z_{\alpha}^2 \overline{x} - 4n z_{\alpha}^2 \overline{x}^2}}{2(n+z_{\alpha}^2)},
+        \frac{2n \overline{x} + z_{\alpha}^2 + \sqrt{z_{\alpha}^4 + 4n z_{\alpha}^2 \overline{x} - 4n z_{\alpha}^2 \overline{x}^2}}{2(n+z_{\alpha}^2)}}
+        \tab[1.3cm] \overline{X} \in \squared{ 1, \frac{n + \sqrt{n^2 + z_{\alpha}^2 n}}{2n } } \\
+        \emptyset \tab[10.4cm] \overline{X} > \frac{n + \sqrt{n^2 + z_{\alpha}^2 n}}{2n } \\
+    \end{cases}
+\end{equation*}
+
+Ensuite, $R_2(X)$ est bien définie pour seulement $\overline{x} \in [0,1]$.
+Si $\overline{x} \in [0,1]$, on a :
+
+\begin{equation*}
+    R_2(X) =  \squared{\max \curly{0, \overline{X} - z_{\alpha} \sqrt{\frac{\overline{X} (1- \overline{X})}{n} }}, 1}
+\end{equation*}
+
+On se concentre, à partir de maintenant, sur $R_3(X)$.
+Fixer un niveau $\alpha \in (0,1)$.
+Afin de trouver et invertir $c(\theta)$, on doit représenter cette définition discrète par 
+une fonction spéciale. On utilise la fonction bêta incomplète régularisée :
+
+\begin{equation*}
+    I_x(a,b) = \frac{B(x;a,b)}{B(a,b)}  = 
+    \frac{\int_0^x t^{a-1} (1-t)^{b-1} dt}{\int_0^1 t^{a-1} (1-t)^{b-1} dt} 
+\end{equation*}
+
+Ici $x \in [0,1]$ et $a,b > 0$.
+Pour $a$ et $b$ fixés, $I_x(a,b)$ est une fonction continue et strictement croissante de $x$. 
+On a alors une inverse continue et strictement croissante $I^{-1}_y(a,b)$ pour tout $y$ dans l'image
+telle que $y = I_{I^{-1}_y(a,b)}(a,b)$. La somme $X_1 + \cdots + X_n$ suit la loi binomiale $B(n, \theta)$.
+Utilisant la fonction bêta incomplète régularisée, 
+on peut représenter la fonction de répartition de cette distribution.
+
+Pour tout $k \in \{0, \cdots, n\}$, on a :
+
+\begin{equation*}
+    P_{\theta} \curly{X_1 + \cdots + X_n \leqslant k} = \sum_{m=0}^k \binom{n}{m} \theta^m (1-\theta)^{n-m} 
+    = I_{1-\theta}(n-k, k+1) 
+\end{equation*}
+
+On remarque que cette formule démontre que $I_{\theta}(n-k, k+1) $ est 
+croissante en nombres entiers $k$ pour tout $\theta \in [0,1]$ fixé.
+On démontre un lemme, qui va être utile plus tard.
+
+\begin{lemma}
+    Fixer un $v \in (0, 1)$. 
+    La fonction $I^{-1}_{v}(n-k, k + 1)$ est 
+    décroissant en nombres entiers $k \in \{0, \cdots, n\} $.
+\end{lemma}
+
+\begin{proof}
+    Soit $k_1$ et $k_2 \in \{0, \cdots, n\}$ telle que $k_1 \leqslant k_2$.
+    Écrire $y_1 = I_{v}^{-1}(n-k_1, k_1 + 1)$ et $y_2 = I_{v}^{-1}(n-k_2, k_2 + 1)$.
+    En raison de croissance monotone de $k$ :
+
+    \begin{equation*}
+        I_{y_2}(n-k_2, k_2 + 1) = v = I_{y_1}(n-k_1,k_1+1) \leqslant I_{y_1}(n-k_2,k_2+1)
+    \end{equation*}
+
+    La croissance monotone de $x$ dans les fonctions $I_x(a,b)$ implique que $y_1 \geqslant y_2$.
+\end{proof}
+
+Retournons au problème principal. 
+Si $y \leqslant 0$, on a $c(\theta) \geqslant y$ pour tout $\theta \in [0,1]$.
+Si $y > n$, on a $c(\theta) \geqslant y$ pour aucun $\theta \in [0,1]$.
+Si $y \in \{1, \cdots, n\}$, on a $c(\theta) \geqslant y$ si et seulement si
+$I_{1-\theta}(n-k, k + 1) \geqslant 1- \alpha$ pour tout $k \in \{y, y+1, \cdots, n\}$
+et $I_{1-\theta}(n-y+1, y) < 1- \alpha$.
+Si on utilise la première condition avec $k = y$, on a, 
+selon la croissance monotone de la fonction inverse :
+
+\begin{equation*}
+    \theta \leqslant 1 - I^{-1}_{1 - \alpha}(n - y, y + 1)
+\end{equation*}
+
+Le lemme montre que cette borne supérieure est la plus petite borne supérieure possible.
+Similairement, on a :
+
+\begin{equation*}
+    \theta > 1 - I^{-1}_{1 - \alpha}(n - y + 1, y)
+\end{equation*}
+
+Finalement, 
+l'observation
+$\curly{\theta \in [0,1] \mid c(\theta) \geqslant y } = \curly{\theta \in [0,1] \mid c(\theta) \geqslant \lceil y \rceil }$
+pour tout $y \in \mathbb{R}$ 
+va résoudre le cas général.
+On conclut que :
+
+\begin{equation*}
+    R_3(X) = 
+    \begin{cases}
+        [0,1] \tab[11.3cm] \overline{X} \leqslant 0 \\
+        \emptyset \tab[11.9cm] \overline{X} > 1 \\
+        \left ( 1 - I^{-1}_{1 - \alpha}(n - \lceil n \overline{X} \rceil + 1, \lceil n \overline{X} \rceil),
+        1 - I^{-1}_{1 - \alpha}(n - \lceil n \overline{X} \rceil , \lceil n \overline{X} \rceil + 1) \right ]
+        \tab[0.5cm] \text{sinon}
+    \end{cases}
+\end{equation*}
+
+On voudrait aussi calculer les probabilités de couverture exacte 
+$P_{\theta} \curly{\theta \in R_k(X)}$ pour les trois régions.
+Écrire, pour tout $x \in \mathbb{R}$, que $h(x) = \chi_{[0, n+1)}(x)\lfloor x \rfloor + n \chi_{[n+1, \infty)}(x)$.
+Il est immédiat que :
+
+\begin{equation*}
+  P_{\theta} \curly{\theta \in R_1(X)} 
+  = \sum_{i = 0}^{h \bracket{ n \theta + z_{\alpha} \sqrt{n \theta (1-\theta)} }} \binom{n}{i} \theta^i (1-\theta)^{n-i}
+  ; \tab[0.5cm] P_{\theta} \curly{\theta \in R_3(X)} 
+  = \sum_{i = 0}^{c(\theta)} \binom{n}{i} \theta^i (1-\theta)^{n-i}
+\end{equation*}
+
+Pour trouver $P_{\theta} \curly{\theta \in R_2(X)}$, il faut d'abord résoudre 
+l'équation $\overline{X} - \theta = z_{\alpha} \sqrt{\frac{\overline{X}(1-\overline{X})}{n}}$.
+La solution est :
+
+\begin{equation*}
+  \overline{x} = \frac{2n \theta + z_{\alpha}^2 \pm \sqrt{z_{\alpha}^4 + 4n z_{\alpha}^2 \theta - 4n z_{\alpha}^2 \theta^2}}{2(n+z_{\alpha}^2)}
+\end{equation*}
+
+Comme $\theta \in [0,1]$, cette solution existe toujours.
+Un regard aux graphes des fonctions $\overline{x} - \theta$ et $z_{\alpha} \sqrt{\frac{\overline{x}(1-\overline{x})}{n}}$
+montre que ces deux fonctions se croise deux fois si et seulement si $\theta = 0$ et 
+se croise exactement une fois à 
+$\overline{x} = \frac{2n \theta + z_{\alpha}^2 + \sqrt{z_{\alpha}^4 + 4n z_{\alpha}^2 \theta - 4n z_{\alpha}^2 \theta^2}}{2(n+z_{\alpha}^2)}$ sinon. 
+Alors, $\theta \in R_2(X)$ si et seulement si
+$\overline{X} \in \squared{0, \frac{2n \theta + z_{\alpha}^2 + \sqrt{z_{\alpha}^4 + 4n z_{\alpha}^2 \theta - 4n z_{\alpha}^2 \theta^2}}{2(n+z_{\alpha}^2)}}$.
+On obtient que :
+
+\begin{equation*}
+  P_{\theta} \curly{\theta \in R_2(X)} 
+  = \sum_{i = 0}^{h \bracket{ \frac{2n \theta + z_{\alpha}^2 + \sqrt{z_{\alpha}^4 + 4n z_{\alpha}^2 \theta - 4n z_{\alpha}^2 \theta^2}}{2(n+z_{\alpha}^2)} }} \binom{n}{i} \theta^i (1-\theta)^{n-i}
+\end{equation*}
+
+Les démonstrations sont complètes. 
+On trace des fonctions importantes. 
+D'abord, on trace $c(\theta)$ pour les $\theta \in \{\frac{i}{M}\}_{i=0}^M $.
+
+\begin{lstlisting}
+library(ggplot2)
+
+n <- 30
+alpha <- 0.1
+M <- 1000
+theta_values <- seq(0, 1, length.out = M+1)
+
+c_theta <- function(theta) {
+  for (k in 0:n) {
+    if (pbinom(k, n, theta) >= 1 - alpha) {
+      return(k)
+    }
+  }
+  return(n)
+}
+
+c_values <- sapply(theta_values, c_theta)
+p <- ggplot(data.frame(theta = theta_values, c = c_values), aes(x = theta, y = c)) + 
+  geom_line() + 
+show(p)
+\end{lstlisting}
+  
+Le résultat est :
+  
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.9\textwidth]{exercice_1a.png}
+\end{figure}
+
+Ensuite, on trace $P_{\theta} \curly{\theta \in R_k}$ pour les $\theta \in \{\frac{i}{M}\}_{i=0}^M$
+et pour chaque $k \in \{1,2,3\}$. Le code R le plus inefficace est comme suivant :
+
+\begin{lstlisting}
+h <- function(num){
+    if (num >= n) {
+       return (n)
+    }
+    else {
+        return(floor(num))
+    }
+}
+
+R_1_borne <- function(theta){
+    return (h(n*theta + qnorm(1-alpha)*sqrt(n*theta*(1-theta))))
+}
+
+R_1_bornes <- sapply(theta_values, R_1_borne)
+
+R_3_borne <- function(theta){
+    z_alpha <- qnorm(1-alpha)
+    return (h(2*n*theta + z_alpha^2 + sqrt(z_alpha^4 + 4*n*theta*(z_alpha^2)- 4*n*(theta*z_alpha)^2)/(2*n+2*z_alpha^2)))
+}
+
+R_3_bornes <- sapply(theta_values, R_3_borne)
+
+prob_couverture <- matrix(0, nrow = 3, ncol = length(theta_values))
+for (i in seq_along(theta_values)){
+    theta <- theta_values[i]
+    for (j in 0: R_1_bornes[i]){
+        prob_couverture[1, i] <- prob_couverture[1, i] + dbinom(j, n, theta)
+    }
+    for (j in 0: c_values[i]){
+        prob_couverture[2, i] <- prob_couverture[2, i] + dbinom(j, n, theta)
+    }
+    for (j in 0: R_3_bornes[i]){
+        prob_couverture[3, i] <- prob_couverture[3, i] + dbinom(j, n, theta)
+    }
+}
+
+data_to_plot <- data.frame(
+  Theta = rep(theta_values, times = 3),
+  Coverage = c(prob_couverture[1, ], prob_couverture[2, ], prob_couverture[3, ]),
+  Interval = rep(c("R1", "R2", "R3"), each = length(theta_values))
+)
+
+p <- ggplot(data_to_plot, aes(x = Theta, y = Coverage, color = Interval)) +
+  geom_line() +
+  labs(title = "Probabilité de couverture exacte pour différents intervalles de confiance",
+       x = "", y = "Probabilité de couverture exacte") +
+  theme_minimal() +  labs(color = " ") +
+  theme(legend.position = "top")+
+  geom_abline(intercept = 0.9, slope = 0, color="black")
+
+show(p)
+\end{lstlisting}
+
+On fait aussi une simulation générant $500$ fois jeu de données pour chaque $\theta \in \{\frac{i}{M}\}_{i=0}^M$.
+
+\begin{lstlisting}
+check_in_R_1 <- function(theta, x_bar){
+  if (x_bar - theta <= qnorm(1 - alpha / 2)*sqrt(theta*(1-theta)/n)){
+    return (1)
+    }
+  else{
+    return(0)}
+}
+
+check_in_R_2 <- function(theta, x_bar){
+  if (x_bar - theta <= qnorm(1 - alpha / 2)*sqrt(x_bar*(1-x_bar)/n)){
+    return (1)
+    }
+  else{
+    return(0)}
+}
+
+check_in_R_3 <- function(theta, x_bar){
+  if (n*x_bar <= c_theta(theta)){
+    return (1)
+    }
+  else{
+    return(0)}
+}
+
+simulation <- function(num_simulations = 500){
+  coverage_prob <- matrix(0, nrow = 3, ncol = length(theta_values))
+  for (i in seq_along(theta_values)){
+    theta <- theta_values[i]
+    coverage <- c(R1 = 0, R2 = 0, R3 = 0)
+    for (sim in 1:num_simulations) {
+      samples <- rbinom(n, size = 1, prob = theta)
+      x_bar <- mean(samples)
+      coverage["R1"] <- coverage["R1"] + check_in_R_1(theta, x_bar)
+      coverage["R2"] <- coverage["R2"] + check_in_R_2(theta, x_bar)
+      coverage["R3"] <- coverage["R3"] + check_in_R_3(theta, x_bar)
+    }
+  coverage_prob[1, i] <- coverage["R1"] / num_simulations
+  coverage_prob[2, i] <- coverage["R2"] / num_simulations
+  coverage_prob[3, i] <- coverage["R3"] / num_simulations
+  }
+  return(coverage_prob)
+}
+
+coverage <- simulation()
+
+data_to_plot <- data.frame(
+  Theta = rep(theta_values, times = 3),
+  Coverage = c(coverage[1, ], coverage[2, ], coverage[3, ]),
+  Interval = rep(c("R1", "R2", "R3"), each = length(theta_values))
+)
+
+p <- ggplot(data_to_plot, aes(x = Theta, y = Coverage, color = Interval)) +
+  geom_line() +
+  labs(title = "Probabilités de couverture Simulées pour différents intervalles de confiance",
+       x = ", y = "Probabilité de couverture Simulé") +
+  theme_minimal() +  labs(color = " ") +
+  theme(legend.position = "top")+
+  geom_abline(intercept = 0.9, slope = 0, color="black")
+
+show(p)
+\end{lstlisting}
+
+Les résultats sont :
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.9\textwidth]{exercice_1d.png}
+\end{figure}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.9\textwidth]{exercice_1_simulation.png}
+\end{figure}
+
+Alors, dans la théorie ou dans la simulation, 
+parmi les valeurs de $\theta$, c'est plus souvent que $R_1$ ou $R_3$ 
+est le plus proche de niveau de confiance nominale $1 - \alpha$.
+Le phénomène de zigzag est aussi observé dans la simulation. ////
+
+\end{CJK*}
+\end{document}

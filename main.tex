@@ -1,0 +1,153 @@
+%Basic constructions like size and language :
+\documentclass[12pt]{report}
+\usepackage[utf8]{inputenc}
+\usepackage{CJKutf8} %Chinese, support of begin cjk end cjk
+\usepackage[T1]{fontenc} %French
+\usepackage[letterpaper, margin=1.27cm]{geometry}
+\usepackage{subfiles} 
+\usepackage{times} %Times New Roman font
+
+%Make title, table of contents
+\usepackage{hyperref} %necessay for maketitle to work
+\usepackage{datetime2} %for the dtmnow command
+
+\title{Uncertainty Quantification in Machine Learning}
+\author{Wen, Zehai}
+\date{\DTMnow}
+
+%Page style, header and footer:
+\usepackage{fancyhdr}
+
+\pagestyle{fancy}
+\fancyhf{}
+\lhead{
+Wen, Zehai $\tab[0.3cm]$ 260956530 $\tab[0.3cm]$
+MATH 598 Uncertainty Quantification in Machine Learning}
+\rhead{\today}
+
+\rfoot{}
+\cfoot{\thepage}
+
+%Graphics and figures:
+\usepackage{graphicx} 
+\usepackage{float} %both graphicx and float packages are necessary for begin figure
+\usepackage{caption} %necessary for any kind of caption
+\usepackage{subcaption} %necessary for subfigure
+
+%Tabular:
+\usepackage{multirow}
+
+%Coding:
+\usepackage{listings}
+\usepackage{color}
+
+\lstset{literate=%
+  {é}{{\'e}}{1}%
+  {è}{{\`e}}{1}%
+  {à}{{\`a}}{1}%
+  {ç}{{\c{c}}}{1}%
+  {œ}{{\oe}}{1}%
+  {ù}{{\`u}}{1}%
+  {É}{{\'E}}{1}%
+  {È}{{\`E}}{1}%
+  {À}{{\`A}}{1}%
+  {Ç}{{\c{C}}}{1}%
+  {Œ}{{\OE}}{1}%
+  {Ê}{{\^E}}{1}%
+  {ê}{{\^e}}{1}%
+  {î}{{\^i}}{1}%
+  {ô}{{\^o}}{1}%
+  {û}{{\^u}}{1}%
+  {ä}{{\"{a}}}1
+  {ë}{{\"{e}}}1
+  {ï}{{\"{i}}}1
+  {ö}{{\"{o}}}1
+  {ü}{{\"{u}}}1
+  {û}{{\^{u}}}1
+  {â}{{\^{a}}}1
+  {Â}{{\^{A}}}1
+  {Î}{{\^{I}}}1
+} 
+
+\definecolor{dkgreen}{rgb}{0,0.6,0}
+\definecolor{gray}{rgb}{0.5,0.5,0.5}
+\definecolor{mauve}{rgb}{0.58,0,0.82}
+
+\lstset{frame=tb,
+  language=Java,
+  aboveskip=3mm,
+  belowskip=3mm,
+  showstringspaces=false,
+  columns=flexible,
+  basicstyle={\small\ttfamily},
+  numbers=none,
+  numberstyle=\tiny\color{gray},
+  keywordstyle=\color{blue},
+  commentstyle=\color{dkgreen},
+  stringstyle=\color{mauve},
+  breaklines=true,
+  breakatwhitespace=true,
+  tabsize=3
+}
+
+%Graph Theory:
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta}
+
+%Commands :
+\newcommand\tab[1][1cm]{\hspace*{#1}}
+\renewcommand{\bibname}{Références}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%Mathematical packages%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%Basic utilities:
+\usepackage{amssymb}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{physics} %for vector symbol
+
+%Commands :
+\DeclareMathOperator*{\argmax}{arg\,max}
+\DeclareMathOperator*{\argmin}{arg\,min}
+
+\newcommand{\bracket}[1]{\left ( #1 \right )}
+\newcommand{\curly}[1]{\left \{ #1 \right \} }
+\newcommand{\squared}[1]{\left [ #1 \right ]}
+
+\usepackage{amsthm}  %Theorem styles
+\theoremstyle{plain}
+\newtheorem{theorem}{Théorème}
+
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Définition} 
+\newtheorem{definitions}[theorem]{Définitions} 
+\newtheorem{example}[theorem]{Exemple}
+\newtheorem{examples}[theorem]{Exemples}
+\newtheorem{remark}[theorem]{Remarque}
+\newtheorem{remarks}[theorem]{Remarques}
+\newtheorem{lemma}[theorem]{Lemme}
+\newtheorem{corollary}[theorem]{Corollaire}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{document}
+\begin{CJK*}{UTF8}{gbsn}
+\maketitle
+
+\setcounter{tocdepth}{0}
+\tableofcontents
+
+\chapter{Assignment 1 Faite le 7 février 2024 date limite le 8 février 2024}
+\subfile{Chapters/assignment_1/assignment_1.tex}
+
+%\chapter{Devoir 2 Faite le 14 février 2024 date limite le 15 février 2024}
+%\subfile{Chapitres/inference_devoir_2/inference_devoir_2.tex}
+
+%\chapter{Devoir 3 Faite le 2 avril 2024 date limite le 4 avril 2024}
+%\subfile{Chapitres/inference_devoir_3/inference_devoir_3.tex}
+
+%\chapter{Devoir 4 Faite le 8 avril 2024 date limite le 16 avril 2024}
+%\subfile{Chapitres/inference_devoir_4/inference_devoir_4.tex}
+
+\end{CJK*}
+\end{document}

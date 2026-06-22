@@ -1,0 +1,104 @@
+\documentclass[../main.tex]{subfiles}
+
+\begin{document}
+\begin{CJK*}{UTF8}{gbsn}
+
+\section*{Exercice 2}
+
+Soit $X_1$ et $X_2$ un échantillon de taille $2$ de $P_{\theta} = \text{Uniform}(0,\theta)$.
+Le paramètre $\theta > 0$ est inconnu. Écrire $Y = \frac{X_1+X_2}{2}$. 
+Étant observé $X_1$ et $X_2$,
+on construit un intervalle de confiance pour $\theta$ de niveau $1-\alpha = 0.9$
+sous la forme $[aY, bY]$ pour $a, b \in \mathbb{R}$.
+Trouvez $a$ et $b$ telle que la longueur de l'intervalle soit minimale.
+
+\paragraph{Solution}
+
+Toutes les densités sont par rapport à la mesure de Lebesgue en $\mathbb{R}$.
+Évidement, $\frac{1}{\theta}(X_1 + X_2)$ est une somme 
+de deux variables aléatoires indépendantes de loi $\text{Uniform}(0,1)$.
+Sa densité $h$ est donnée par :
+
+\begin{equation*}
+    h(z) = \int_{\mathbb{R}} \chi_{(0,1)}(x) \chi_{(0,1)}(x-z) dx = 
+    m ((z-1,z) \cap (0,1)) = z \chi_{(0,1)}(z) + (2-z) \chi_{(1,2)}(z)
+\end{equation*}
+
+Écrire $f$ pour la densité de $\frac{\theta}{Y}$. Alors :
+
+\begin{equation*}
+    f(z) = \frac{4}{z^3} \chi_{(2,\infty)}(z) + \bracket{\frac{4}{z^2}-\frac{4}{z^3}} \chi_{(1,2)}(z)
+\end{equation*}
+
+Supposons que $P_{\theta} \curly{\theta \in [a Y, b Y]} = 1 - \alpha$
+pour des nombres $a, b \in \mathbb{R}$, où $\alpha = 0.1$.
+Comme :
+
+\begin{equation*}
+    \int_{2}^{\infty} \frac{4}{z^3} dz = \int_{1}^{2} \bracket{\frac{4}{z^2}-\frac{4}{z^3}}dz = \frac{1}{2}
+\end{equation*}
+
+Il faut minimiser $b-a$ pour $1 \leqslant a \leqslant 2 \leqslant b$ sous la contrainte :
+
+\begin{equation*}
+    1 - \alpha = \int_{a}^{b} f(z) dz = \int_{a}^{2}  \bracket{\frac{4}{z^2}-\frac{4}{z^3}}dz  + \int_{2}^{b} \frac{4}{z^3} dz
+\end{equation*}
+
+Après de résoudre des intégraux, on obtient la contrainte simplifiée :
+
+\begin{equation*}
+    \frac{4}{a} - \frac{2}{a^2} - 2 + \alpha - \frac{2}{b^2} = 0
+\end{equation*}
+
+On multiplie $a^2b^2$ des deux côtés et on obtient :
+
+\begin{equation*}
+    [(\alpha-2)a^2 + 4a - 2]b^2 = 2 a^2
+\end{equation*}
+
+Comme $(\alpha-2)a^2 + 4a - 2 > 0$ quand $a \in (\frac{2-\sqrt{2 \alpha}}{2-\alpha}, \frac{2+\sqrt{2 \alpha}}{2-\alpha})$, 
+on réduit la contrainte de $a$ à $[1,2] \cap (\frac{2-\sqrt{2 \alpha}}{2-\alpha}, \frac{2+\sqrt{2 \alpha}}{2-\alpha})$.
+Quand $\alpha = 0.1$, cela donne effectivement $a \in [1,1.288007156)$.
+Si $a$ est dans cet intervalle, on a :
+
+\begin{equation*}
+    b = a \sqrt{\frac{2}{(\alpha-2)a^2 + 4a - 2}}
+\end{equation*}
+
+On définit une fonction $g : [1,2] \cap (\frac{2-\sqrt{2 \alpha}}{2-\alpha}, \frac{2+\sqrt{2 \alpha}}{2-\alpha}) \to \mathbb{R}$ par :
+
+\begin{equation*}
+    g(a) = a \sqrt{\frac{2}{(\alpha-2)a^2 + 4a - 2}} - a
+\end{equation*}
+
+Comme $g$ est continue, soit $a_0$ le minimum de $g$. 
+L'intervalle de longueur minimale est alors $[a_0Y, b_0Y]$ où $b_0 = a_0 \sqrt{\frac{2}{(\alpha-2)a_0^2 + 4a_0 - 2}}$.
+Malheureusement, $a_0$ n'a pas de forme analytique. 
+On poursuit en R avec $\alpha = 0.1$ pour obtenir une approximation numérique :
+
+\begin{lstlisting}
+alpha <- 0.05
+intervalle <- c(max(1, ((2-sqrt(2*alpha))/(2-alpha))), min(2, ((2+sqrt(2*alpha))/(2-alpha))))
+
+g <- function(a){
+    return (sqrt(2)*a/sqrt((alpha-2)*a**2+4*a-2) - a)
+}
+
+a_0 <- optimize(f = g, interval = intervalle)$minimum
+b_0 <- g(a_0) + a_0
+
+print(c(a_0,b_0))
+print(b_0-a_0)
+\end{lstlisting}
+
+La réponse est :
+
+\begin{lstlisting}
+[1] 1.011526 4.477954
+[1] 3.466428
+\end{lstlisting}
+
+Alors, si $\alpha = 0.1$, le choix optimal est
+approximativement $a_0 = 1.011526$ et $b_0 = 4.477954$. ////
+\end{CJK*}
+\end{document}
