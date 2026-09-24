@@ -8,29 +8,77 @@
 For $z \in \mathbb{R}^n$,
 write $\hat{F}_z(v) = \frac{1}{n} \sum_{i=1}^n \chi_{\{z_i \leq v\}}$ 
 for the empirical cumulative distribution function of $z$
-and $\text{Quantile}(z; \tau) = z_{(\lceil \tau n \rceil)}$
-for any $\tau \in (0,1]$.
-$\text{Quantile}(z; 0)$ is defined as $- \infty$.
+with $\hat{F}_z(-\infty) = 0$ and $\hat{F}_z(+\infty) = 1$.
+Write 
+
+\begin{equation*}
+  \text{Quantile}(z; \tau) 
+  = \inf \curly{v \in \mathbb{R} \mid \hat{F}_z(v) \geqslant \tau}
+\end{equation*}
+for the empirical $\tau$-quantile of $z$ for any $\tau \in [0, 1]$.
+Consequently, $\text{Quantile}(z; 0) = -\infty$.
 
 Prove that, for any $z \in \mathbb{R}^n$,
-the following statements are equivalent:
+the following statements are true:
 
 \begin{enumerate}
   \item $\hat{F}_z(v) = \sup 
-  \curly{\tau \in (0, 1) \mid \text{Quantile}(z; \tau) \leqslant v}$ for all $v \in \mathbb{R}$.
+  \curly{\tau \in [0, 1] \mid \text{Quantile}(z; \tau) \leqslant v}$ for all $v \in \mathbb{R}$.
   \item $\text{Quantile}(z; \hat{F}_z(v)) \leqslant v$ for all $v \in \mathbb{R}$.
   \item $\hat{F}_z(\text{Quantile}(z; \tau)) \geqslant \tau$ for all $\tau \in [0, 1]$.
+  \item If $z$ has no repeated values, then 
+  $\hat{F}_z(\text{Quantile}(z; \tau)) = \frac{\lceil n\tau \rceil}{n}$ for all $\tau \in [0, 1]$.
 \end{enumerate}
-Prove also that, in case $z$ has no repeated values, 
-all above statements are equivalent 
-to the statement that, for all $\tau \in [0, 1]$,
-
-\begin{equation*}
-  \hat{F}_z(\text{Quantile}(z; \tau)) = \frac{\lceil \tau n \rceil}{n}.
-\end{equation*}
 
 \paragraph{Solution}
-NEED WORK
-////
+Let $z \in \mathbb{R}^n$ be given and fixed.
+Let us inrtoduce a notation $S_{\tau}$
+for the set of all $v \in \mathbb{R}$ such that $\hat{F}_z(v) \geqslant \tau$.
+Then, by definition, $\text{Quantile}(z; \tau) = \inf S_{\tau}$.
+All four statements depend on the following lemma:
+
+\begin{lemma}
+If $v \in \mathbb{R}$ and $\tau \in [0, 1]$, then
+$\text{Quantile}(z; \tau) \leqslant v$ if and only if $\tau \leqslant \hat{F}_z(v)$.
+\end{lemma}
+
+\begin{proof}
+If $\tau \leqslant \hat{F}_z(v)$, then $v \in S_{\tau}$ 
+and $v \geqslant \inf S_{\tau} = \text{Quantile}(z; \tau)$.
+
+Let us focus on the converse.
+Suppose that $\text{Quantile}(z; \tau) \leqslant v$.
+For simplicity, put $q = \text{Quantile}(z; \tau)$.
+If $\tau = 0$, then $\hat{F}_z(v) \geqslant 0 = \tau$ holds trivially.
+Assume from now on that $\tau > 0$.
+Then $q$ is finite number.
+Choose $\delta > 0$ small enough such that no points 
+$z_i$ lies between $q$ and $q + \delta$,
+which is always doable because $z$ has only finitely many points.
+Since $q$ is the infimum,
+choose $s \in S_{\tau}$ such that $q \leqslant s < q + \delta$.
+Then, we arrive at 
+
+\begin{equation*}
+  \hat{F}_z(v) \geqslant \hat{F}_z(q) = \hat{F}_z(s) \geqslant \tau
+\end{equation*}
+by applying in the first inequality the monotonicity of $\hat{F}_z$ 
+and in the second equality the fact that no points $z_i$ lies between $q$ and $q + \delta$.
+The lemma is proved.
+\end{proof}
+
+We now prove the four statements.
+To prove the first statement, 
+let $v \in \mathbb{R}$ be given 
+and we have, by the lemma:
+
+\begin{equation*}
+  \curly{\tau \in [0,1] \mid \text{Quantile}(z; \tau) \leqslant v}
+  = \curly{\tau \in [0,1] \mid \tau \leqslant \hat{F}_z(v)} = [0, \hat{F}_z(v)]
+\end{equation*}
+and the suprenum of the interval is just $\hat{F}_z(v)$.
+The second and the third statements are already included in the lemma.
+The fourth statement is trivial given the 
+special assumption that $z$ has no repeated values.////
 \end{CJK*}
 \end{document}
