@@ -1,0 +1,36 @@
+\documentclass[../main.tex]{subfiles}
+
+\begin{document}
+\begin{CJK*}{UTF8}{gbsn}
+
+\section*{Exercise 6}
+
+For $z \in \mathbb{R}^n$,
+write $\hat{F}_z(v) = \frac{1}{n} \sum_{i=1}^n \chi_{\{z_i \leq v\}}$ 
+for the empirical cumulative distribution function of $z$
+and $\text{Quantile}(z; \tau) = z_{(\lceil \tau n \rceil)}$
+for any $\tau \in (0,1]$.
+$\text{Quantile}(z; 0)$ is defined as $- \infty$.
+
+Prove that, for any $z \in \mathbb{R}^n$,
+the following statements are equivalent:
+
+\begin{enumerate}
+  \item $\hat{F}_z(v) = \sup 
+  \curly{\tau \in (0, 1) \mid \text{Quantile}(z; \tau) \leqslant v}$ for all $v \in \mathbb{R}$.
+  \item $\text{Quantile}(z; \hat{F}_z(v)) \leqslant v$ for all $v \in \mathbb{R}$.
+  \item $\hat{F}_z(\text{Quantile}(z; \tau)) \geqslant \tau$ for all $\tau \in [0, 1]$.
+\end{enumerate}
+Prove also that, in case $z$ has no repeated values, 
+all above statements are equivalent 
+to the statement that, for all $\tau \in [0, 1]$,
+
+\begin{equation*}
+  \hat{F}_z(\text{Quantile}(z; \tau)) = \frac{\lceil \tau n \rceil}{n}.
+\end{equation*}
+
+\paragraph{Solution}
+NEED WORK
+////
+\end{CJK*}
+\end{document}

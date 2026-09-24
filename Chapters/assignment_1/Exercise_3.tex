@@ -1,0 +1,43 @@
+\documentclass[../main.tex]{subfiles}
+
+\begin{document}
+\begin{CJK*}{UTF8}{gbsn}
+
+\section*{Exercise 3}
+
+Consider split conformal prediction with $\mathcal{Y} = \mathbb{R}$,
+two given models $\hat{f}_i: \mathcal{X} \to \mathbb{R}$
+for $i = 1, 2$, and the score function 
+
+\begin{equation*}
+  s(x,y) = \min_{i = 1, 2} \abs{y - \hat{f}_i(x)}.
+\end{equation*}
+Derive an explicit expression for $\mathcal{C}(x)$
+in terms of $\hat{f}_1(x)$, $\hat{f}_2(x)$, and the quantile $\hat{q}$ of the scores on the validation set.
+What is the shape of the prediction when $\hat{q}$ is small or when 
+it is large?
+Briefly explain why this might be attractive if the conditional 
+distribution of $Y$ given $X = x$ is bimodal.
+
+\paragraph{Solution}
+By definition, it is immediately clear that
+
+\begin{equation*}
+    \mathcal{C}(x) = \{y \in \mathcal{Y} \mid s(x,y) \leqslant \hat{q}\}
+    = [\hat{f}_1(x) - \hat{q}, \hat{f}_1(x) + \hat{q}] \cup [\hat{f}_2(x) - \hat{q}, \hat{f}_2(x) + \hat{q}].
+\end{equation*}
+If $\hat{f}_1(x)=\hat{f}_2(x)$, then $\mathcal{C}(x)$ is an interval 
+of length $2\hat{q}$ centered at $\hat{f}_1(x) = \hat{f}_2(x)$.
+If we assume that the two models are different at $x$,
+that is, 
+$\hat{f}_1(x) \neq \hat{f}_2(x)$, then $\mathcal{C}(x)$ is the union of two intervals
+when $\hat{q}$ is small enough, and it is a single interval when $\hat{q}$ is large enough.
+If the conditional 
+distribution of $Y$ given $X = x$ is bimodal,
+then the score might be of interest 
+because $\hat{f}_1(x)$ and $\hat{f}_2(x)$
+might capture the two modes of the distribution 
+and the predicted interval will be centred at both modes. 
+////
+\end{CJK*}
+\end{document}

@@ -1,0 +1,33 @@
+\documentclass[../main.tex]{subfiles}
+
+\begin{document}
+\begin{CJK*}{UTF8}{gbsn}
+
+\section*{Exercise 5}
+Fix $n \geqslant 1$, $\tau \in (0,1)$.
+For any vector $v \in \mathbb{R}^n$,
+define $\text{Quantile}(v; \tau) = v_{(\lceil \tau n \rceil)}$,
+where $v_{(1)} \leqslant v_{(2)} \leqslant \ldots \leqslant v_{(n)}$ are the order statistics of $v$.
+Under what condition is it true that, for all $v \in \mathbb{R}^n$,
+$\text{Quantile}(v; 1- \tau) = -\text{Quantile}(-v; \tau)$?
+
+\paragraph{Solution}
+The order statistics of $-v$ are given by $(-v)_{(i)} = -v_{(n-i+1)}$ for $i = 1, \ldots, n$.
+Therefore, $\text{Quantile}(v; 1- \tau) = -\text{Quantile}(-v; \tau)$
+holds
+for a vector $v \in \mathbb{R}^n$
+if and only if 
+
+\begin{equation*}
+  v_{(\lceil (1-\tau) n \rceil)} = -((-v)_{(\lceil \tau n \rceil)})
+  = -(-v_{(n-\lceil \tau n \rceil + 1)})
+  = v_{(n-\lceil \tau n \rceil + 1)}.
+\end{equation*}
+To make this work for all $v \in \mathbb{R}^n$, the condition we must pose is that
+\begin{equation*}
+\lceil (1-\tau) n \rceil = n-\lceil \tau n \rceil + 1.
+\end{equation*}
+This can happen for instance when $\tau = 1/2$ and $n$ is odd.
+////
+\end{CJK*}
+\end{document}
