@@ -4,28 +4,76 @@
 \begin{CJK*}{UTF8}{gbsn}
 
 \section*{Exercise 8}
-
-exercise 3.6
-
-\paragraph{Solution}
-By definition, it is immediately clear that
+Consider the full conformal prediction 
+with $(X_1, Y_1), \cdots, (X_{n+1}, Y_{n+1})$ 
+being exchangeable and a symmetric score function $s$,
+prove that 
 
 \begin{equation*}
-    \mathcal{C}(x) = \{y \in \mathcal{Y} \mid s(x,y) \leqslant \hat{q}\}
-    = [\hat{f}_1(x) - \hat{q}, \hat{f}_1(x) + \hat{q}] \cup [\hat{f}_2(x) - \hat{q}, \hat{f}_2(x) + \hat{q}].
+    P \curly{Y_{n+1} \in \mathcal{C}(X_{n+1})} \leqslant 1 - \alpha + 
+    \mathbb{E} \squared{\frac{1}{n+1}\sum_{i=1}^{n+1} \chi_{\{S_i = \hat{q}\}}}
 \end{equation*}
-If $\hat{f}_1(x)=\hat{f}_2(x)$, then $\mathcal{C}(x)$ is an interval 
-of length $2\hat{q}$ centered at $\hat{f}_1(x) = \hat{f}_2(x)$.
-If we assume that the two models are different at $x$,
-that is, 
-$\hat{f}_1(x) \neq \hat{f}_2(x)$, then $\mathcal{C}(x)$ is the union of two intervals
-when $\hat{q}$ is small enough, and it is a single interval when $\hat{q}$ is large enough.
-If the conditional 
-distribution of $Y$ given $X = x$ is bimodal,
-then the score might be of interest 
-because $\hat{f}_1(x)$ and $\hat{f}_2(x)$
-might capture the two modes of the distribution 
-and the predicted interval will be centred at both modes. 
+where 
+
+\begin{equation*}
+    \hat{q} = \text{Quantile}\bracket{S_1, \ldots, S_{n+1}; 1- \alpha}.
+\end{equation*}
+
+Give an example showing that this bound is tighter than 
+
+\begin{equation*}
+    P \curly{Y_{n+1} \in \mathcal{C}(X_{n+1})} \leqslant \frac{\lceil (1-\alpha)(n+1) \rceil}{n+1}
+    + \epsilon_{\text{tie}}
+\end{equation*}
+where $\epsilon_{\text{tie}}$
+is the probability of $S_{n+1}$ 
+being equal to some $S_j$ for $j \in \{1, \ldots, n\}$.
+
+\paragraph{Solution}
+As already discussed in the lecture and in the textbook,
+$Y_{n+1} \in \mathcal{C}(X_{n+1})$ if and only if $S_{n+1} \leqslant \hat{q}$
+and so 
+
+\begin{equation*}
+    P \curly{Y_{n+1} \in \mathcal{C}(X_{n+1})} =
+    P \curly{S_{n+1} \leqslant \hat{q}} =
+    P \curly{S_{n+1} < \hat{q}} + P \curly{S_{n+1} = \hat{q}}.
+\end{equation*}
+Given that $(S_1, \ldots, S_n,S_{n+1})$ is exchangeable,
+$P \curly{S_{n+1} = \hat{q}} = P \curly{S_{i} = \hat{q}}$
+for all $i \in \{1, \ldots, n\}$ and
+
+\begin{equation*}
+    P \curly{S_{n+1} = \hat{q}} 
+    = \frac{1}{n+1} \sum_{i=1}^{n+1} P \curly{S_{i} = \hat{q}}
+    = \mathbb{E} \squared{\frac{1}{n+1}\sum_{i=1}^{n+1} \chi_{\{S_i = \hat{q}\}}}.
+\end{equation*}
+The only thing left is to show that $P \curly{S_{n+1} < \hat{q}} \leqslant 1-\alpha$.
+To do so, first observe that 
+$S_{n+1} < \hat{q}$ if and only if $S_{n+1} < S_{(k)}$,
+where $k = \lceil (1-\alpha)(n+1) \rceil$.
+Thus:
+
+\begin{equation*}
+    P \curly{S_{n+1} < \hat{q}} 
+    = P \curly{S_{n+1} < S_{(k)}} 
+    \leqslant \frac{\lceil (1-\alpha)(n+1) \rceil - 1}{n+1}
+    = \frac{\lfloor (1-\alpha)(n+1) \rfloor}{n+1} 
+    \leqslant \frac{ (1-\alpha)(n+1) }{n+1} = 1-\alpha.
+\end{equation*}
+This completes the proof.
+
+Finally, in case when the random variables $S_i$'s 
+are all continuous random variables, 
+$\epsilon_{\text{tie}} = P \curly{S_{n+1} = \hat{q}} = 0$ and 
+evidently the bound that is worked out 
+in this exercise is better.
+In case when the random variables $S_i$'s 
+are discrete and can only take very limited values,
+it may happen that $S_1, \ldots, S_n$ has taken all 
+possible values and $\epsilon_{\text{tie}} = 1$
+so that the bound worked out here is really 
+the only available bound.
 ////
 \end{CJK*}
 \end{document}

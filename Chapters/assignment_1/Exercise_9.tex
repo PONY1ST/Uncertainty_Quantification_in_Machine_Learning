@@ -4,28 +4,81 @@
 \begin{CJK*}{UTF8}{gbsn}
 
 \section*{Exercise 9}
-
-exercise 3.7
-
-\paragraph{Solution}
-By definition, it is immediately clear that
+Given data set $(X_1,Y_1),\ldots,(X_n,Y_n) \in \mathcal{X} \times \mathcal{Y}$
+where $\mathcal{Y} = \mathbb{R}$,
+consider split conformal prediction with 
+two given models $\hat{f}_i: \mathcal{X} \to \mathbb{R}$, 
+the score functions
 
 \begin{equation*}
-    \mathcal{C}(x) = \{y \in \mathcal{Y} \mid s(x,y) \leqslant \hat{q}\}
-    = [\hat{f}_1(x) - \hat{q}, \hat{f}_1(x) + \hat{q}] \cup [\hat{f}_2(x) - \hat{q}, \hat{f}_2(x) + \hat{q}].
+  s_i(x,y) = \abs{y - \hat{f}_i(x)},
 \end{equation*}
-If $\hat{f}_1(x)=\hat{f}_2(x)$, then $\mathcal{C}(x)$ is an interval 
-of length $2\hat{q}$ centered at $\hat{f}_1(x) = \hat{f}_2(x)$.
-If we assume that the two models are different at $x$,
-that is, 
-$\hat{f}_1(x) \neq \hat{f}_2(x)$, then $\mathcal{C}(x)$ is the union of two intervals
-when $\hat{q}$ is small enough, and it is a single interval when $\hat{q}$ is large enough.
-If the conditional 
-distribution of $Y$ given $X = x$ is bimodal,
-then the score might be of interest 
-because $\hat{f}_1(x)$ and $\hat{f}_2(x)$
-might capture the two modes of the distribution 
-and the predicted interval will be centred at both modes. 
+and two split conformal prediction sets 
+
+\begin{equation*}
+\mathcal{C}_i(X_{n+1}) = \{y \in \mathcal{Y} \mid s_i(X_{n+1},y) \leqslant \hat{q}_i\},
+\end{equation*}
+where 
+
+\begin{equation*}
+    \hat{q}_i = \text{quantile}\curly{ \curly{s_i(X_j,Y_j)}_{j=1}^n ; (1-\alpha)(1+\frac{1}{n})}.
+\end{equation*}
+Put 
+
+\begin{equation*}
+    L_i = \frac{1}{n} \sum_{j=1}^n (Y_j-\hat{f}_i(X_j))^2
+\end{equation*}
+and $I = \argmin_{i \in \{1,2\}} L_i$.
+Explain why 
+
+\begin{equation*}
+    P \curly{Y_{n+1} \in \mathcal{C}_I(X_{n+1})} \geqslant 1-\alpha
+\end{equation*}
+may not hold even if we assume that 
+$(X_1,Y_1),\ldots,(X_{n+1},Y_{n+1})$
+are exchangeable.
+
+\paragraph{Solution}
+In one sentence, the reason is that
+even if we assume that the three random vectors 
+$(X_1,Y_1),\ldots,(X_{n+1},Y_{n+1})$,
+$s_1(X_1,Y_1) ,\ldots,s_1(X_{n+1},Y_{n+1})$,
+and $s_2(X_1,Y_1) ,\ldots,s_2(X_{n+1},Y_{n+1})$
+are all exchangeable, in general 
+it is still not true that 
+$s_I(X_1,Y_1) ,\ldots,s_I(X_{n+1},Y_{n+1})$
+is exchangeable and thus 
+the theorem guaranteeing the marginal coverage does not in general apply.
+
+To show that things can indeed fail,
+we give a simple counterexample.
+Put $\mathcal{X} = \mathbb{R}^2$, $n = 1$, $\alpha = \frac{1}{2}$,
+$X_j = (X_j^{(1)},X_j^{(2)})$, $X_j$ follows $N_2(0,I_2)$
+distribution, $Y_j = X_j^{(1)} + X_j^{(2)}$,
+$\hat{f}_1(x) = x^{(1)}$ and $\hat{f}_2(x) = x^{(2)}$.
+It is clear that, for $i = 1,2$, $\hat{q}_i = s_i(X_1,Y_1)$,
+$s_i(X_j, Y_j) = \abs{X_j^{(2-i)}}$,
+and $L_i = (X_1^{(2-i)})^2$.
+Thus,
+
+\begin{equation*}
+    \begin{split}
+    & \tab[0.4cm] P \curly{s_I(X_2,Y_2) \leqslant \min(s_1(X_1,Y_1),s_2(X_1,Y_1))}
+    \\ & = P \curly{s_1(X_2,Y_2) \leqslant \min(s_1(X_1,Y_1),s_2(X_1,Y_1)), L_1 < L_2}
+    \\ & + P \curly{s_2(X_2,Y_2) \leqslant \min(s_1(X_1,Y_1),s_2(X_1,Y_1)), L_1 > L_2}
+    \\ & = P \curly{\abs{X_2^{(2)}} \leqslant \abs{X_1^{(2)}} \leqslant \abs{X_1^{(1)}}}
+    + P \curly{\abs{X_2^{(1)}} \leqslant \abs{X_1^{(1)}} \leqslant \abs{X_1^{(2)}}}
+    = \frac{1}{6} + \frac{1}{6} = \frac{1}{3}
+    \end{split}
+\end{equation*}
+and
+
+\begin{equation*}
+    P \curly{Y_2 \in \mathcal{C}_I(X_2)} 
+    = P \curly{s_I(X_2,Y_2) \leqslant \min(s_1(X_1,Y_1),s_2(X_1,Y_1))}
+    = \frac{1}{3} < \frac{1}{2} = 1-\alpha.
+\end{equation*}
+This completes the counterexample.
 ////
 \end{CJK*}
 \end{document}

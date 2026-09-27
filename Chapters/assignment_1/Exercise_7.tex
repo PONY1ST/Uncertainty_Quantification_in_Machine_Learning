@@ -4,28 +4,60 @@
 \begin{CJK*}{UTF8}{gbsn}
 
 \section*{Exercise 7}
-
-exercise 3.1
-
-\paragraph{Solution}
-By definition, it is immediately clear that
+Consider the conformal prediction with $\mathcal{Y} = \mathbb{R}$
+with a given model $\hat{f}: \mathcal{X} \to \mathcal{Y}$
+and calibration points $(X_1, Y_1)$,$\ldots$, $(X_n, Y_n)$.
+Put 
 
 \begin{equation*}
-    \mathcal{C}(x) = \{y \in \mathcal{Y} \mid s(x,y) \leqslant \hat{q}\}
-    = [\hat{f}_1(x) - \hat{q}, \hat{f}_1(x) + \hat{q}] \cup [\hat{f}_2(x) - \hat{q}, \hat{f}_2(x) + \hat{q}].
+    \hat{q}_L = \text{Quantile}\bracket{\curly{\hat{f}(X_i)-Y_i}_{i=1}^n ; 
+    \bracket{1- \frac{\alpha}{2}} \bracket{1+ \frac{1}{n}}},
 \end{equation*}
-If $\hat{f}_1(x)=\hat{f}_2(x)$, then $\mathcal{C}(x)$ is an interval 
-of length $2\hat{q}$ centered at $\hat{f}_1(x) = \hat{f}_2(x)$.
-If we assume that the two models are different at $x$,
-that is, 
-$\hat{f}_1(x) \neq \hat{f}_2(x)$, then $\mathcal{C}(x)$ is the union of two intervals
-when $\hat{q}$ is small enough, and it is a single interval when $\hat{q}$ is large enough.
-If the conditional 
-distribution of $Y$ given $X = x$ is bimodal,
-then the score might be of interest 
-because $\hat{f}_1(x)$ and $\hat{f}_2(x)$
-might capture the two modes of the distribution 
-and the predicted interval will be centred at both modes. 
+
+\begin{equation*}
+    \hat{q}_R = \text{Quantile}\bracket{Y_i-\curly{\hat{f}(X_i)}_{i=1}^n ; 
+    \bracket{1- \frac{\alpha}{2}} \bracket{1+ \frac{1}{n}}},
+\end{equation*}
+and
+\begin{equation*}
+    \mathcal{C}(X_{n+1}) = \squared{\hat{f}(X_{n+1}) - \hat{q}_L, \hat{f}(X_{n+1}) + \hat{q}_R}.
+\end{equation*}
+Prove that 
+
+\begin{equation*}
+    P \curly{Y_{n+1} \in \mathcal{C}(X_{n+1})} \geqslant 1-\alpha
+\end{equation*}
+by showing both
+
+\begin{equation*}
+    P \curly{Y_{n+1} < \hat{f}(X_{n+1}) - \hat{q}_L} \leqslant \frac{\alpha}{2}
+\end{equation*}
+and 
+\begin{equation*}
+    P \curly{Y_{n+1} > \hat{f}(X_{n+1}) + \hat{q}_R} \leqslant \frac{\alpha}{2},
+\end{equation*}
+assuming that $(X_1, Y_1),\ldots, (X_{n+1}, Y_{n+1})$
+is exchangeable.
+
+\paragraph{Solution}
+We have
+
+\begin{equation*}
+    P \curly{Y_{n+1} < \hat{f}(X_{n+1}) - \hat{q}_L}
+    = P \curly{\hat{f}(X_{n+1}) - Y_{n+1} > \hat{q}_L }
+    = 1 - P \curly{\hat{f}(X_{n+1}) - Y_{n+1} \leqslant \hat{q}_L }
+    \leqslant 1 - \bracket{1- \frac{\alpha}{2}} = \frac{\alpha}{2}
+\end{equation*}
+where the last inequality 
+uses Theorem 3.2 in the textbook
+with score $S_i = \hat{f}(X_{i}) - Y_{i}$.
+This is legitimate because the data is assumed 
+to be exchangeable and the score is trivially 
+symmetric in case of split conformal prediction.
+The right hand side inequality is proved in 
+exactly the same way but with score $S_i = Y_i-\hat{f}(X_{i})$.
+Combine the two, we have the desired marginal coverage.
+The proof is complete.
 ////
 \end{CJK*}
 \end{document}
