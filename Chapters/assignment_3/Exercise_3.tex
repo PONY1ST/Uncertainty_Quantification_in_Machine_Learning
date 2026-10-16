@@ -1,43 +1,83 @@
-\documentclass[../main.tex]{subfiles}
+\documentclass[../../main.tex]{subfiles}
 
 \begin{document}
 \begin{CJK*}{UTF8}{gbsn}
 
-\section*{Exercise 3}
+\section*{Exercise 9.3}
 
-Consider split conformal prediction with $\mathcal{Y} = \mathbb{R}$,
-two given models $\hat{f}_i: \mathcal{X} \to \mathbb{R}$
-for $i = 1, 2$, and the score function 
-
-\begin{equation*}
-  s(x,y) = \min_{i = 1, 2} \abs{y - \hat{f}_i(x)}.
-\end{equation*}
-Derive an explicit expression for $\mathcal{C}(x)$
-in terms of $\hat{f}_1(x)$, $\hat{f}_2(x)$, and the quantile $\hat{q}$ of the scores on the validation set.
-What is the shape of the prediction when $\hat{q}$ is small or when 
-it is large?
-Briefly explain why this might be attractive if the conditional 
-distribution of $Y$ given $X = x$ is bimodal.
+Fix $n\geqslant1$. Consider the naive discretization strategy (9.6),
+using a finite uniform grid $G=\{y^{(1)},\ldots,y^{(M)}\}$ over $[-B,B]$.
+Construct a distribution $P$ and a symmetric score function $s$ such
+that this approximation has zero marginal coverage for every choice
+of grid size $M$ and range $B>0$.
 
 \paragraph{Solution}
-By definition, it is immediately clear that
-
+First consider the nontrivial range $\alpha\geqslant1/(n+1)$, with
+$0<\alpha<1$. The very small $\alpha$ case is addressed below.
+Take $\mathcal{X}=\mathcal{Y}=\mathbb{R}$ and define $P$ by
 \begin{equation*}
-    \mathcal{C}(x) = \{y \in \mathcal{Y} \mid s(x,y) \leqslant \hat{q}\}
-    = [\hat{f}_1(x) - \hat{q}, \hat{f}_1(x) + \hat{q}] \cup [\hat{f}_2(x) - \hat{q}, \hat{f}_2(x) + \hat{q}].
+    X\sim\operatorname{Unif}(0,1),\qquad Y=X.
 \end{equation*}
-If $\hat{f}_1(x)=\hat{f}_2(x)$, then $\mathcal{C}(x)$ is an interval 
-of length $2\hat{q}$ centered at $\hat{f}_1(x) = \hat{f}_2(x)$.
-If we assume that the two models are different at $x$,
-that is, 
-$\hat{f}_1(x) \neq \hat{f}_2(x)$, then $\mathcal{C}(x)$ is the union of two intervals
-when $\hat{q}$ is small enough, and it is a single interval when $\hat{q}$ is large enough.
-If the conditional 
-distribution of $Y$ given $X = x$ is bimodal,
-then the score might be of interest 
-because $\hat{f}_1(x)$ and $\hat{f}_2(x)$
-might capture the two modes of the distribution 
-and the predicted interval will be centred at both modes. 
+Sample $(X_i,Y_i)$ independently from $P$ and choose
+\begin{equation*}
+    \boxed{s((x,y);D)=|y-x|.}
+\end{equation*}
+This score is symmetric because it does not depend on $D$ at all.
+
+For every candidate response $y$, all $n$ training scores are zero:
+\begin{equation*}
+    S_i^{y}=|Y_i-X_i|=0,\qquad i=1,\ldots,n,
+\end{equation*}
+whereas the test score is $S_{n+1}^{y}=|y-X_{n+1}|$.
+Since $k=\lceil(n+1)(1-\alpha)\rceil\leqslant n$, the conformal quantile
+of the training scores is zero. Consequently, the exact full conformal
+prediction set is
+\begin{equation*}
+    \mathcal{C}_{\mathrm{full}}(X_{n+1})=\{X_{n+1}\},
+\end{equation*}
+which covers $Y_{n+1}=X_{n+1}$ with probability $1$.
+
+Now fix any finite grid $G$. Since $X_{n+1}$ is continuously distributed,
+\begin{equation*}
+    P\{X_{n+1}\in G\}
+    \leqslant\sum_{m=1}^{M}P\{X_{n+1}=y^{(m)}\}=0.
+\end{equation*}
+Therefore, almost surely every grid point has strictly positive test
+score and fails the comparison against the zero calibration quantile.
+The accepted grid-index set is empty. In particular, the expansion of
+accepted grid points into intervals in (9.6) produces
+\begin{equation*}
+    \mathcal{C}_{\mathrm{naive}}(X_{n+1})
+    =\bigcup_{m\in\varnothing}(y^{(m-1)},y^{(m+1)})
+    =\varnothing
+    \quad\text{almost surely}.
+\end{equation*}
+Hence
+\begin{equation*}
+    \boxed{P\{Y_{n+1}\in\mathcal{C}_{\mathrm{naive}}(X_{n+1})\}=0.}
+\end{equation*}
+The same $P$ and $s$ work for every fixed finite grid, including every
+uniform grid of any resolution or range. For $M=1$, interpret the grid
+as any chosen single point; the argument is unchanged.
+
+\paragraph{The necessary restriction on $\alpha$}
+As written, the exercise omits a restriction needed for its conclusion.
+If $0<\alpha<1/(n+1)$, then
+\begin{equation*}
+    \lceil(n+1)(1-\alpha)\rceil=n+1.
+\end{equation*}
+The conformal quantile is then $+\infty$, so every grid point is
+accepted for any real-valued score function. With the boundary
+convention $y^{(0)}=-\infty$ and $y^{(M+1)}=+\infty$ from Section 9.2.3,
+\begin{equation*}
+    \mathcal{C}_{\mathrm{naive}}(X_{n+1})
+    =\bigcup_{m=1}^{M}(y^{(m-1)},y^{(m+1)})=\mathbb{R}.
+\end{equation*}
+Its coverage is $1$, making zero coverage impossible in this range.
+Thus the counterexample applies precisely when
+$\alpha\geqslant1/(n+1)$, or equivalently when the conformal threshold
+is a finite calibration order statistic.
 ////
+
 \end{CJK*}
 \end{document}

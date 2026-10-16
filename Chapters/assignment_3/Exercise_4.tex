@@ -1,27 +1,58 @@
-\documentclass[../main.tex]{subfiles}
+\documentclass[../../main.tex]{subfiles}
 
 \begin{document}
 \begin{CJK*}{UTF8}{gbsn}
 
-\section*{Exercise 4}
+\section*{Exercise 9.4}
 
-Fix $n > 2$. 
-Construct a random vector $(X_1, \ldots, X_n)$
-defined on some probability space 
-such that $(X_i, X_j)$ is exchangeable for all $i \neq j$
-but $(X_1, \ldots, X_n)$ is not exchangeable.
+Let $A$ be a regression algorithm that takes an ordered dataset $D$ of
+size $m$ and returns $\hat{f}(\cdot;D)$, without assuming symmetry.
+Let $\xi\sim\operatorname{Unif}[0,1]$ and choose a map
+$\xi\mapsto\sigma_{\xi}\in\mathfrak{S}_m$ such that $\sigma_{\xi}$ is
+uniform among all permutations. Define
+\begin{equation*}
+    s((x,y);D,\xi)=|y-\hat{f}(x;D_{\sigma_{\xi}})|.
+\end{equation*}
+Prove that $s$ is a symmetric randomized score function in the sense
+of Definition 9.1.
 
 \paragraph{Solution}
-Let $(X,Y)$ be a jointly normal random vector.
-It is exchangeable if and only if $\mathbb{E}[X] = \mathbb{E}[Y]$ and $\text{Var}(X) = \text{Var}(Y)$.
-With this in mind,
-let $(X_1, \ldots, X_n)$ be a jointly normal 
-random vector such that $\mathbb{E}[X_i] = \mathbb{E}[X_j]$ 
-and $\text{Var}(X_i) = \text{Var}(X_j)$ for all $i \neq j$ 
-but $\text{Cov}(X_1, X_2) \neq \text{Cov}(X_1, X_3)$.
-Then $(X_i, X_j)$ is exchangeable for all $i \neq j$ but $(X_1, \ldots, X_n)$ is not exchangeable.
-For a concrete example, say $\mathbb{E}[X_i] = 0$ and $\text{Var}(X_i) = 1$ for all $i$,
-$\text{Cov}(X_1, X_2) = -1$, and all other covariances are zero.
+Fix any dataset $D=(z_1,\ldots,z_m)$ and any permutation
+$\pi\in\mathfrak{S}_m$, where $z_j=(x_j,y_j)$.
+If $\sigma\in\mathfrak{S}_m$, then
+\begin{equation*}
+    (D_{\pi})_{\sigma}
+    =(z_{\pi(\sigma(1))},\ldots,z_{\pi(\sigma(m))})
+    =D_{\pi\circ\sigma}.
+\end{equation*}
+The map $\sigma\mapsto\pi\circ\sigma$ is a bijection of
+$\mathfrak{S}_m$, with inverse $\rho\mapsto\pi^{-1}\circ\rho$.
+Thus composing a uniform random permutation with the fixed permutation
+$\pi$ preserves its uniform distribution:
+\begin{equation*}
+    \pi\circ\sigma_{\xi}\overset{d}{=}\sigma_{\xi}.
+\end{equation*}
+In particular, shuffling $D_{\pi}$ uniformly has the same distribution
+as shuffling $D$ uniformly.
+
+To verify the full requirement of Definition 9.1, fix any finite list
+of evaluation points $(x'_1,y'_1),\ldots,(x'_r,y'_r)$ and define
+\begin{equation*}
+    F(\rho)=\bigl(|y'_j-\hat{f}(x'_j;D_{\rho})|\bigr)_{j=1}^{r},
+    \qquad\rho\in\mathfrak{S}_m.
+\end{equation*}
+Using the same random seed for all $r$ scores, we obtain
+\begin{align*}
+    \bigl(s((x'_j,y'_j);D_{\pi},\xi)\bigr)_{j=1}^{r}
+    &=F(\pi\circ\sigma_{\xi})\\
+    &\overset{d}{=}F(\sigma_{\xi})\\
+    &=\bigl(s((x'_j,y'_j);D,\xi)\bigr)_{j=1}^{r}.
+\end{align*}
+This proves equality in distribution of the entire score vector for
+arbitrary evaluation points and any permutation of $D$, exactly as
+required by Definition 9.1. No symmetry of $A$ is needed: the random
+shuffle gives every possible ordering of the data the same probability.
 ////
+
 \end{CJK*}
 \end{document}

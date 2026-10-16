@@ -1,30 +1,114 @@
-\documentclass[../main.tex]{subfiles}
+\documentclass[../../main.tex]{subfiles}
 
 \begin{document}
 \begin{CJK*}{UTF8}{gbsn}
 
 \section*{Exercise 1}
 
-Consider split conformal prediction with $\mathcal{Y} = \mathbb{R}$
-and a given model $\hat{f}: \mathcal{X} \to \mathbb{R}$.
-Construct a score function $s(x,y)$
-that would yield intervals of the form $\mathcal{C}(x) 
-= [\hat{f}(x) - \gamma, \hat{f}(x) + 2 \gamma]$ for some $\gamma > 0$.
-
-\paragraph{Solution}
-Put 
+Consider split conformal prediction 
+with data set $(X_1, Y_1), \cdots, (X_{n+1}, Y_{n+1}) \in \mathcal{X} \times \mathcal{Y}$ 
+and the conformal risk control with given score 
+$s : \mathcal{X} \times \mathcal{Y} \to \mathbb{R}$.
+We write $S_i = s(X_i, Y_i)$ for all $i$ for simplicity.
+Instead of what is in Chapter 10 of the book, we define,
+for all $\lambda \geqslant 0$:
 
 \begin{equation*}
-  s(x,y) = 
-  \begin{cases}
-    2 \abs{\hat{f}(x)-y} \tab[5cm] & y < \hat{f}(x) \\
-    \abs{\hat{f}(x)-y} \tab[5.1cm] & y \geqslant \hat{f}(x).
-  \end{cases}
+    \mathcal{C}_{\lambda}(x)
+    = \curly{y \in \mathcal{Y} \mid s(x,y) < \lambda }
 \end{equation*}
-Then, with $\hat{q}$
-being a quantile of the scores on the validation set
-and $\mathcal{C}(x) = \{y \in \mathcal{Y} \mid s(x,y) \leqslant \hat{q}\}$,
-we will have the desired interval with $\gamma = \frac{\hat{q}}{2}$.
+and 
+
+\begin{equation*}
+    L(y,\mathcal{C}_{\lambda}(x))
+= \chi_{ \curly{y \notin \mathcal{C}_{\lambda}(x)} }.
+\end{equation*}
+
+Show that, with this definition,
+$L(y,\mathcal{C}_{\lambda}(x))$ 
+is no longer always right continuous for every 
+fixed $(x,y) \in \mathcal{X} \times \mathcal{Y}$.
+Next, given $\alpha \in (0,1)$, give a concrete expression for 
+
+\begin{equation*}
+    \hat{\lambda} = \inf \curly{\lambda \geqslant 0 \mid \hat{R}(\lambda) 
+    \leqslant \alpha - \frac{\alpha - 1}{n}}
+\end{equation*}
+in terms of the data,
+where 
+
+\begin{equation*}
+    \hat{R}(\lambda) = \frac{1}{n} \sum_{i=1}^n L(Y_i,\mathcal{C}_{\lambda}(X_i)).
+\end{equation*}
+Show that, if we assume that $(S_1, \ldots, S_{n+1})$ is exchangeable 
+and that the $S_i$'s almost surely has no tie,
+then 
+
+\begin{equation*}
+    P\curly{Y_{n+1}\in\mathcal{C}_{\hat{\lambda}}(X_{n+1})}
+    \geqslant 1-\alpha.
+\end{equation*}
+Provide a counterexample to show that 
+this need not hold if there are ties in $S_i$'s with positive probability,
+even if they are exchangeable.
+
+\paragraph{Solution}
+Let $(x,y) \in \mathcal{X} \times \mathcal{Y}$ be given.
+If $\{\lambda_m\}_{m=1}^{\infty}$ is any decreasing sequence such that
+$\lambda_m > s(x,y)$ for every $m$ and $\lambda_m \to s(x,y)$ as $m \to \infty$,
+then $L(y,\mathcal{C}_{\lambda_m}(x)) = 1$ for all $m$ 
+but $L(y,\mathcal{C}_{s(x,y)}(x)) = 0$, proving that 
+$L(y,\mathcal{C}_{\lambda}(x))$ is not always right continuous.
+
+We move to compute $\hat{\lambda}$.
+The definition of $\hat{R}(\lambda)$ and simple arithmetic rearrangement 
+shows that,
+for any $\lambda \geqslant 0$,
+
+\begin{equation*}
+    \hat{R}(\lambda) \leqslant \alpha - \frac{\alpha - 1}{n}
+\end{equation*}
+if and only if 
+
+\begin{equation*}
+    \sum_{i=1}^n \chi_{\curly{S_i < \lambda}} \geqslant (n+1)(1-\alpha).
+\end{equation*}
+Thus, it is obvious that 
+
+\begin{equation*}
+    \hat{\lambda} = S_{\bracket{\lceil(n+1)(1-\alpha)\rceil}}.
+\end{equation*}
+Here
+we have used order statistics $S_{(1)} \leqslant \cdots \leqslant S_{(n)}$
+for the first $n$ values of $S_1, \ldots, S_n$.
+Consequently:
+
+\begin{equation*}
+    C_{\hat{\lambda}}(X_{n+1})
+    = \curly{y \in \mathcal{Y} \mid s(X_{n+1}, y) < 
+    S_{\bracket{\lceil(n+1)(1-\alpha)\rceil}}}.
+\end{equation*}
+
+To prove coverage, let $\alpha \in (0,1)$ be given.
+Assume first that
+that $(S_1, \ldots, S_{n+1})$ is exchangeable and 
+there is almost surely no tie in the $S_i$'s.
+Then
+
+\begin{equation*}
+    P\curly{Y_{n+1} \in C_{\hat{\lambda}}(X_{n+1})}
+    = P\curly{S_{n+1} < S_{\bracket{\lceil(n+1)(1-\alpha)\rceil}}}
+    = \frac{\lceil(n+1)(1-\alpha)\rceil}{n + 1} \geqslant 1 - \alpha,
+\end{equation*}
+where the second equality uses both assumptions:
+when $S_{(1)} < \cdots < S_{(n)}$, inserting a new exchangeable 
+point $S_{n+1}$ to get exactly right before $\lceil(n+1)(1-\alpha)\rceil$th place 
+has the probability $\frac{\lceil(n+1)(1-\alpha)\rceil}{n + 1}$.
+If we remove the assumption that there are no ties,
+then everything can go wrong. For example,
+just setting $s \equiv 0$.
+Then $\hat{\lambda} = 0$ and $C_{\hat{\lambda}}(x)= \emptyset$ for all $x$,
+clearly not yielding any good coverage probability.
 ////
 
 \end{CJK*}

@@ -1,31 +1,112 @@
-\documentclass[../main.tex]{subfiles}
+\documentclass[../../main.tex]{subfiles}
 
 \begin{document}
 \begin{CJK*}{UTF8}{gbsn}
 
 \section*{Exercise 2}
-
-Consider split conformal prediction with $\mathcal{Y} = \mathbb{R}^d$
-and a given model $\hat{f}: \mathcal{X} \to \mathbb{R}^d$
-whose coordinates are $\hat{f}(x) = (\hat{f}_1(x), \ldots, \hat{f}_d(x))$.
-Construct a score function $s(x,y)$
-that would yield intervals of the form 
+Consider split conformal prediction 
+with data set $(X_1, Y_1), \cdots, (X_{n+2}, Y_{n+2}) 
+\in \mathcal{X} \times \mathcal{Y}$ 
+with given score 
+$s : \mathcal{X} \times \mathcal{Y} \to \mathbb{R}$.
+We write $S_i = s(X_i, Y_i)$ for all $i$ for simplicity.
+For $j \in \{1,2\}$, the conformal $p$-value is the random variable defined by 
 
 \begin{equation*}
-    \mathcal{C}(x) =  \prod_{j=1}^{d} [\hat{f}_j(x) - c, \hat{f}_j(x) + c]
+    p_j = \frac{1+\sum_{i=1}^{n}\chi_{ \curly{S_{n+j}\leqslant S_i}}}{n+1}.
 \end{equation*}
-for a $c > 0$.
+Given $\alpha \in (0,1)$,
+let $\mathcal{C}$ be the conformal interval 
+calibrated only on the first $n$ observations.
+In other words, for $j \in \{1,2\}$, 
+the event $\{Y_{n+j}\in\mathcal{C}(X_{n+j}) \}$
+equals to $\{p_j < \alpha\}$.
+Assuming that $((X_1, Y_1), \cdots, (X_{n+2}, Y_{n+2}))$ 
+is exchangeable, $s$ is a symmetric score function, 
+and that the random vector $(p_1,p_2)$
+satisfies the 
+positive regression dependence on subsets (PRDS) assumption 
+given in definition 10.3 of the textbook,
+prove that 
+
+\begin{equation*}
+    P\{Y_{n+1}\in\mathcal{C}(X_{n+1}),\,
+       Y_{n+2}\in\mathcal{C}(X_{n+2})\}\geqslant(1-\alpha)^2
+\end{equation*}
+without explicitly computing the probability on the left 
+hand side of the inequality.
 
 \paragraph{Solution}
-Put 
+First of all, Theorem 3.2 in the textbook already guarantees that,
+for $j \in \{1,2\}$:
 
 \begin{equation*}
-  s(x,y) = \max_{j=1,\ldots,d} \abs{\hat{f}_j(x)-y_j}.
+    P\{Y_{n+j}\in\mathcal{C}(X_{n+j})\} \geqslant 1-\alpha.
 \end{equation*}
-Then, with $\hat{q}$
-being a quantile of the scores on the validation set
-and $\mathcal{C}(x) = \{y \in \mathcal{Y} \mid s(x,y) \leqslant \hat{q}\}$,
-we will have the desired interval with $c = \hat{q}$.
+We focus on showing that 
+
+\begin{equation*}
+    P\curly{Y_{n+2}\in\mathcal{C}(X_{n+2}) \mid Y_{n+1}\in\mathcal{C}(X_{n+1}) } 
+    \geqslant 1-\alpha.
+\end{equation*}
+In order to make use of the PRDS condition, 
+define a function $g$ on the support of the discrete 
+random variable $p_1$ by setting,
+for all $t$, that 
+
+\begin{equation*}
+    g(t) = P \bracket{ \curly{p_2 > \alpha} \mid p_1 = t}.
+\end{equation*}
+Note the following facts:
+
+\begin{enumerate}
+    \item $g$ is monotonically increasing because 
+$g(t) = P \bracket{\curly{(p_1,p_2)\in A} \mid p_1 = t}$
+with the set $A$ defined by all $(u,v) \in \mathbb{R}^2$ 
+with $v < \alpha$, who is an increasing set.
+    \item The average value of $g(p_1)$ on the set 
+    $\{p_1 > \alpha\}$ is the desired conditional probability.
+    In symbols:
+
+    \begin{equation*}
+        \frac{1}{P\{p_1 > \alpha\}} \mathbb{E} \squared{g(p_1); \curly{p_1 > \alpha}}
+        = P\curly{Y_{n+2}\in\mathcal{C}(X_{n+2}) \mid Y_{n+1}\in\mathcal{C}(X_{n+1}) }.
+    \end{equation*}
+    \item The expectation of $g(p_1)$ is the marginal covergae of $(X_{n+2}, Y_{n+2})$.
+    In symbols:
+    \begin{equation*}
+        \mathbb{E} \squared{g(p_1)}
+        = P\curly{Y_{n+2}\in\mathcal{C}(X_{n+2})}.
+    \end{equation*}
+    \item The average value of $g(p_1)$ on the set $\{p_1 > \alpha\}$
+    is greater or equal to the average value of $g(p_1)$ on the set 
+    $\{p_1 \leqslant \alpha\}$ because $g$ is monotonically increasing.
+    That is:
+
+    \begin{equation*}
+        \frac{1}{P\{p_1 > \alpha\}} \mathbb{E} \squared{g(p_1); \curly{p_1 > \alpha}}
+        \geqslant \frac{1}{P\{p_1 \leqslant \alpha\}} 
+        \mathbb{E} \squared{g(p_1); \curly{p_1 \leqslant \alpha}}
+    \end{equation*}
+\end{enumerate}
+The proof is complete once we combine the last three facts 
+with the marginal coverage on $(X_{n+2},Y_{n+2})$:
+
+\begin{equation*}
+    \begin{split}
+    & \tab[0.4cm] 1- \alpha \geqslant P\curly{Y_{n+2}\in\mathcal{C}(X_{n+2})}
+    = \mathbb{E} \squared{g(p_1)} 
+    \\ & = \frac{P\{p_1 > \alpha\}}{P\{p_1 > \alpha\}} \mathbb{E} \squared{g(p_1); \curly{p_1 > \alpha}}
+    + \frac{P\{p_1 \leqslant \alpha\}}{P\{p_1 \leqslant \alpha\}} 
+        \mathbb{E} \squared{g(p_1); \curly{p_1 \leqslant \alpha}}
+    \\ & \geqslant 
+    (P\{p_1 > \alpha\} + P\{p_1 \leqslant \alpha\})
+    \frac{1}{P\{p_1 > \alpha\}} \mathbb{E} \squared{g(p_1); \curly{p_1 > \alpha}}
+    \\ & = \frac{1}{P\{p_1 > \alpha\}} \mathbb{E} \squared{g(p_1); \curly{p_1 > \alpha}}
+    = P\curly{Y_{n+2}\in\mathcal{C}(X_{n+2}) \mid Y_{n+1}\in\mathcal{C}(X_{n+1}) }.
+    \end{split}
+\end{equation*}
 ////
+
 \end{CJK*}
 \end{document}

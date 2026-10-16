@@ -1,27 +1,79 @@
-\documentclass[../main.tex]{subfiles}
+\documentclass[../../main.tex]{subfiles}
 
 \begin{document}
 \begin{CJK*}{UTF8}{gbsn}
 
 \section*{Exercise 4}
-
-Fix $n > 2$. 
-Construct a random vector $(X_1, \ldots, X_n)$
-defined on some probability space 
-such that $(X_i, X_j)$ is exchangeable for all $i \neq j$
-but $(X_1, \ldots, X_n)$ is not exchangeable.
+Consider split conformal prediction 
+with calibration data set $(X_1, Y_1), \cdots, (X_{n}, Y_{n}) 
+\in \mathcal{X} \times \mathcal{Y}$ 
+at given level $\alpha \in (0,1)$
+and given score 
+$s : \mathcal{X} \times \mathcal{Y} \to \mathbb{R}$.
+We write $S_i = s(X_i, Y_i)$ for all $i$ for simplicity.
+We look at the aggregating prediction sets by the majority vote 
+$\mathcal{C}^{\text{mv}}(X_{n+1})$
+of two conformal algorithms $\mathcal{C}_1$ and $\mathcal{C}_2$,
+where $\mathcal{C}_1$ uses $s$ as score and 
+$\mathcal{C}_2$ uses $-s$ as score.
+Give an explicit formula of $\mathcal{C}^{\text{mv}}(X_{n+1})$
+and its marginal coverage level, assuming exchangeability of the data set,
+symmetry of $s$, and almost surely no 
+ties in $S_i$'s.
 
 \paragraph{Solution}
-Let $(X,Y)$ be a jointly normal random vector.
-It is exchangeable if and only if $\mathbb{E}[X] = \mathbb{E}[Y]$ and $\text{Var}(X) = \text{Var}(Y)$.
-With this in mind,
-let $(X_1, \ldots, X_n)$ be a jointly normal 
-random vector such that $\mathbb{E}[X_i] = \mathbb{E}[X_j]$ 
-and $\text{Var}(X_i) = \text{Var}(X_j)$ for all $i \neq j$ 
-but $\text{Cov}(X_1, X_2) \neq \text{Cov}(X_1, X_3)$.
-Then $(X_i, X_j)$ is exchangeable for all $i \neq j$ but $(X_1, \ldots, X_n)$ is not exchangeable.
-For a concrete example, say $\mathbb{E}[X_i] = 0$ and $\text{Var}(X_i) = 1$ for all $i$,
-$\text{Cov}(X_1, X_2) = -1$, and all other covariances are zero.
-////
+We first compute the expression of each conformal set.
+Let us use the order statistics $S_{(1)} < \cdots < S_{(n)}$
+of $S_1, \cdots, S_n$. 
+Put 
+
+\begin{equation*}
+    k=\lceil(n+1)(1-\alpha)\rceil.
+\end{equation*}
+We discuss by cases of whether $k = n + 1$.
+
+First of all, in the usual case, $ k < n + 1$.
+The rule $(-v)_{(i)} = - v_{(n-i+1)}$ for any $v \in \mathbb{R}^n$
+tells us that, by definition of $\mathcal{C}_1$ and $\mathcal{C}_2$:
+
+\begin{equation*}
+    \mathcal{C}_1(x)=\curly{y \in \mathcal{Y} \mid s(x,y) \leqslant S_{(k)} }
+\end{equation*}
+and 
+\begin{equation*}
+    \mathcal{C}_2(x)=\curly{y \in \mathcal{Y} \mid s(x,y) \geqslant S_{(n+1-k)}}.
+\end{equation*}
+Thus, by definition:
+
+\begin{equation*}
+    \mathcal{C}^{\text{mv}}(x)
+    = \curly{y\in \mathcal{Y} \mid 
+    \frac{1}{2} \sum_{i=1}^2 \chi_{y \in C_i(x)} > \frac{1}{2}} 
+    =\mathcal{C}_1(x)\cap\mathcal{C}_2(x)
+    =\curly{y\in \mathcal{Y} \mid S_{(n+1-k)}\leqslant s(x,y)\leqslant S_{(k)}}.
+\end{equation*}
+Next, for the trivial case $k = n + 1$, we have
+$\mathcal{C}^{\text{mv}}(x)=\mathcal{C}_1(x)=\mathcal{C}_2(x)=\mathcal{Y}$.
+Therefore:
+
+\begin{equation*}
+    \mathcal{C}^{\text{mv}}(X_{n+1})
+    = 
+    \begin{cases}
+        \curly{y\in \mathcal{Y} \mid S_{(n+1-k)}\leqslant s(X_{n+1},y)\leqslant S_{(k)}}
+        \tab[1.0cm] k=\lceil(n+1)(1-\alpha)\rceil < n + 1, \\
+        \mathcal{Y} \tab[7.7cm] k= n + 1.
+    \end{cases}
+\end{equation*}
+A simple counting of the probability of placing $S_{n+1}$ gives
+
+\begin{equation*}
+    P\curly{Y_{n+1} \in \mathcal{C}^{\text{mv}}(X_{n+1}) }
+    =\frac{\max\{0,2k-n-1\}}{n+1}
+    =\max\curly{0,1-\frac{2\lfloor\alpha(n+1)\rfloor}{n+1}}.
+\end{equation*}
+It just happens that this formula works for $k = n + 1$ case as well.
+This completes the computation. ////
+
 \end{CJK*}
 \end{document}

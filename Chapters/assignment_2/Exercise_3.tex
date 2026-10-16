@@ -1,43 +1,61 @@
-\documentclass[../main.tex]{subfiles}
+\documentclass[../../main.tex]{subfiles}
 
 \begin{document}
 \begin{CJK*}{UTF8}{gbsn}
 
 \section*{Exercise 3}
 
-Consider split conformal prediction with $\mathcal{Y} = \mathbb{R}$,
-two given models $\hat{f}_i: \mathcal{X} \to \mathbb{R}$
-for $i = 1, 2$, and the score function 
-
+Suppose $(X_1,Y_1), \ldots, (X_{n+2},Y_{n+2}) \in \mathcal{X} \times \mathcal{Y}$ 
+are exchangeable.
+After observing $X_{n+1}$ and $X_{n+2}$, select $I \in \{1,2\}$, where
+$I$ may depend on both $(X_{n+1}, X_{n+2})$. 
+Given score $s : \mathcal{X} \times \mathcal{Y} \to \mathbb{R}$,
+define a (full) conformal prediction set $\mathcal{C}(X_{n+I})$ such that 
 \begin{equation*}
-  s(x,y) = \min_{i = 1, 2} \abs{y - \hat{f}_i(x)}.
+    P\{Y_{n+I} \in \mathcal{C}(X_{n+I})\} \geqslant 1-\alpha.
 \end{equation*}
-Derive an explicit expression for $\mathcal{C}(x)$
-in terms of $\hat{f}_1(x)$, $\hat{f}_2(x)$, and the quantile $\hat{q}$ of the scores on the validation set.
-What is the shape of the prediction when $\hat{q}$ is small or when 
-it is large?
-Briefly explain why this might be attractive if the conditional 
-distribution of $Y$ given $X = x$ is bimodal.
 
 \paragraph{Solution}
-By definition, it is immediately clear that
+
+The solution is to use a Benferroni correction for the two test points.
+
+Specifically,
+put $S_i = s(X_i,Y_i)$
+and let $S_{(1)} \leqslant \cdots \leqslant S_{(n)}$
+be the order statistics for $S_1, \ldots, S_n$.
+Define
 
 \begin{equation*}
-    \mathcal{C}(x) = \{y \in \mathcal{Y} \mid s(x,y) \leqslant \hat{q}\}
-    = [\hat{f}_1(x) - \hat{q}, \hat{f}_1(x) + \hat{q}] \cup [\hat{f}_2(x) - \hat{q}, \hat{f}_2(x) + \hat{q}].
+    k=\left\lceil(n+1)\left(1-\frac{\alpha}{2}\right)\right\rceil,
 \end{equation*}
-If $\hat{f}_1(x)=\hat{f}_2(x)$, then $\mathcal{C}(x)$ is an interval 
-of length $2\hat{q}$ centered at $\hat{f}_1(x) = \hat{f}_2(x)$.
-If we assume that the two models are different at $x$,
-that is, 
-$\hat{f}_1(x) \neq \hat{f}_2(x)$, then $\mathcal{C}(x)$ is the union of two intervals
-when $\hat{q}$ is small enough, and it is a single interval when $\hat{q}$ is large enough.
-If the conditional 
-distribution of $Y$ given $X = x$ is bimodal,
-then the score might be of interest 
-because $\hat{f}_1(x)$ and $\hat{f}_2(x)$
-might capture the two modes of the distribution 
-and the predicted interval will be centred at both modes. 
+\begin{equation*}
+    \hat{q}=
+    \begin{cases}
+        S_{(k)}, & k \leqslant n,\\
+        \infty, & k=n+1,
+    \end{cases}
+\end{equation*}
+and 
+\begin{equation*}
+    \mathcal{C}(X_{n+I})
+    =\curly{ y \in \mathcal{Y} \mid s(X_{n+I},y)\leqslant \hat{q}}.
+\end{equation*}
+Standard results (for example, for full conformal prediction,
+Theorem 3.2 in the textbook) show that,
+for $i \in \{1,2\}$, we have 
+
+\begin{equation*}
+    P\curly{Y_{n+i} \notin \mathcal{C}(X_{n+i}) } \leqslant \frac{\alpha}{2}.
+\end{equation*}
+Thus:
+
+\begin{equation*}
+    P \curly{Y_{n + I} \notin \mathcal{C}(X_{n+I})}
+    = P \bracket{ \bigcup_{i=1}^2 \curly{Y_{n+i} \notin \mathcal{C}(X_{n+i})}
+    } \leqslant 2 \times \frac{\alpha}{2} = \alpha.
+\end{equation*}
+This completes the proof.
 ////
+
 \end{CJK*}
 \end{document}

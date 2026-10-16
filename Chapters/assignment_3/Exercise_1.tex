@@ -1,30 +1,72 @@
-\documentclass[../main.tex]{subfiles}
+\documentclass[../../main.tex]{subfiles}
 
 \begin{document}
 \begin{CJK*}{UTF8}{gbsn}
 
-\section*{Exercise 1}
+\section*{Exercise 9.1}
 
-Consider split conformal prediction with $\mathcal{Y} = \mathbb{R}$
-and a given model $\hat{f}: \mathcal{X} \to \mathbb{R}$.
-Construct a score function $s(x,y)$
-that would yield intervals of the form $\mathcal{C}(x) 
-= [\hat{f}(x) - \gamma, \hat{f}(x) + 2 \gamma]$ for some $\gamma > 0$.
+Consider full conformal prediction with an exchangeable dataset and a
+symmetric score function. Instead of comparing the test score against
+all $n$ training scores, compare it against a random subset indexed by
+$I\subseteq\{1,\ldots,n\}$, sampled independently of the data:
+\begin{equation*}
+    \mathcal{C}(X_{n+1})
+    =\left\{y\in\mathcal{Y}:S_{n+1}^{y}\leqslant
+    \operatorname{Quantile}\left((S_i^{y})_{i\in I};
+    (1-\alpha)\left(1+\frac{1}{|I|}\right)\right)\right\}.
+\end{equation*}
+Prove that this modified prediction set has marginal coverage at least
+$1-\alpha$.
 
 \paragraph{Solution}
-Put 
-
+Let $Z_i=(X_i,Y_i)$, $D_{n+1}=(Z_1,\ldots,Z_{n+1})$, and define the
+scores at the true test response by
 \begin{equation*}
-  s(x,y) = 
-  \begin{cases}
-    2 \abs{\hat{f}(x)-y} \tab[5cm] & y < \hat{f}(x) \\
-    \abs{\hat{f}(x)-y} \tab[5.1cm] & y \geqslant \hat{f}(x).
-  \end{cases}
+    S_i=s(Z_i;D_{n+1}),\qquad i=1,\ldots,n+1.
 \end{equation*}
-Then, with $\hat{q}$
-being a quantile of the scores on the validation set
-and $\mathcal{C}(x) = \{y \in \mathcal{Y} \mid s(x,y) \leqslant \hat{q}\}$,
-we will have the desired interval with $\gamma = \frac{\hat{q}}{2}$.
+Symmetry of $s$ and exchangeability of the data imply that
+$(S_1,\ldots,S_{n+1})$ is exchangeable. Indeed, for every permutation
+$\pi$ of the $n+1$ indices,
+\begin{equation*}
+    (S_{\pi(i)})_{i=1}^{n+1}
+    =\bigl(s(Z_{\pi(i)};(D_{n+1})_{\pi})\bigr)_{i=1}^{n+1}
+    \overset{d}{=}(S_i)_{i=1}^{n+1}.
+\end{equation*}
+The equality uses symmetry in the dataset argument, and the equality in
+distribution uses exchangeability of the data.
+
+Now condition on $I=J$, for any fixed nonempty subset $J$ having positive
+probability, and put $m=|J|$. Independence of $I$ and the data means that
+conditioning on $I=J$ does not change the distribution of the scores.
+Thus the $m$ selected scores together with $S_{n+1}$ remain exchangeable.
+Let
+\begin{equation*}
+    k_m=\lceil(m+1)(1-\alpha)\rceil.
+\end{equation*}
+If $k_m\leqslant m$, the quantile in the question is the $k_m$th smallest
+score among $(S_i)_{i\in J}$. The exchangeable-rank argument gives
+\begin{equation*}
+    P\{Y_{n+1}\in\mathcal{C}(X_{n+1})\mid I=J\}
+    \geqslant\frac{k_m}{m+1}\geqslant1-\alpha.
+\end{equation*}
+For completeness, break any score ties uniformly at random solely for
+this rank argument. The rank of $S_{n+1}$ among the $m+1$ scores is then
+uniform on $\{1,\ldots,m+1\}$. Rank at most $k_m$ implies that
+$S_{n+1}$ is no larger than the selected-sample quantile, which proves
+the first inequality even when scores tie.
+If $k_m=m+1$, the quantile is $+\infty$ by the conformal convention,
+and the conditional coverage is $1$.
+
+Averaging the conditional guarantees over all possible subsets yields
+\begin{equation*}
+    \boxed{P\{Y_{n+1}\in\mathcal{C}(X_{n+1})\}
+    =\sum_J P(I=J)
+    P\{Y_{n+1}\in\mathcal{C}(X_{n+1})\mid I=J\}
+    \geqslant1-\alpha.}
+\end{equation*}
+If an empty subset is allowed, define its threshold to be $+\infty$ and
+return $\mathcal{Y}$ on that event; the same conclusion follows.
+Notice that $I$ need not be uniform among subsets, nor have a fixed size.
 ////
 
 \end{CJK*}
