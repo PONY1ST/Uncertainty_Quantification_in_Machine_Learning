@@ -3,72 +3,68 @@
 \begin{document}
 \begin{CJK*}{UTF8}{gbsn}
 
-\section*{Exercise 9.2}
+\section*{Exercise 2}
 
-For $\mathcal{Y}=\mathbb{R}$, consider $K$-nearest-neighbor regression,
+Fix positive integer $K$ and
+consider the $K$-nearest neighbor regression
+with $\mathcal{X}$ being any set (any metric space) and $\mathcal{Y} = \mathbb{R}$
+who gives a fitted model
+
 \begin{equation*}
-    \hat{f}(x;D)=\frac{1}{K}\sum_{j\in N(x,D)}y_j,
+    \hat{f}(x; \mathcal{D})=\frac{1}{K}\sum_{i \in N(x, \mathcal{D})}y_i,
 \end{equation*}
-where $N(x,D)$ indexes the $K$ nearest feature vectors to $x$ in $D$.
-Show that this algorithm has the affine dependence on the candidate
-response required by (9.4), so that its full conformal prediction set
-can be computed efficiently.
+where $\mathcal{D}$ is any data set containing points from $\mathcal{X} \times \mathcal{Y}$
+and $N(x, \mathcal{D})$ denotes indices of all $K$ points in $\mathcal{D}$
+whose $\mathcal{X}$ component is, in some sense, closest to $x$.
+We can assume that there is almost surely no ties 
+by implementing any tie breaking rule.
+
+Now let us consider the data set
+
+\begin{equation*}
+    \mathcal{D}_{n} = \curly{(X_1, Y_1), \cdots, (X_{n}, Y_{n})}.
+\end{equation*}
+For any $y \in \mathcal{Y}$, put
+
+\begin{equation*}
+    \mathcal{D}_{n+1}^y = \curly{(X_1, Y_1), \cdots, (X_{n}, Y_{n}), (X_{n+1}, y)}.
+\end{equation*}
+Prove that there exists real valued functions $a(x; \mathcal{D}_{n}, X_{n+1})$
+and $b(x; \mathcal{D}_{n}, X_{n+1})$
+whose values depend only on $x$, $\mathcal{D}_{n}$, and $X_{n+1}$
+such that, for all $(x,y) \in \mathcal{X} \times \mathcal{Y}$:
+
+\begin{equation*}
+    \hat{f}(x; \mathcal{D}_{n+1}^y)
+    = a(x; \mathcal{D}_{n}, X_{n+1}) + b(x; \mathcal{D}_{n}, X_{n+1})y.
+\end{equation*}
 
 \paragraph{Solution}
-Fix the training data $D_n=((X_j,Y_j))_{j=1}^{n}$ and the test feature
-$X_{n+1}$. For a candidate response $y$, let
-\begin{equation*}
-    D_{n+1}^{y}=((X_1,Y_1),\ldots,(X_n,Y_n),(X_{n+1},y)).
-\end{equation*}
-Use a fixed rule for distance ties that depends only on features and
-indices, rather than response values. Then the neighbor set
-$N(x',D_{n+1}^{y})$ does not depend on $y$: the augmented feature vectors
-are the same for every candidate. Denote this set by $N_{x'}$.
-Separating out the possible contribution of the test point gives
-\begin{align*}
-    \hat{f}(x';D_{n+1}^{y})
-    &=\frac{1}{K}\sum_{j\in N_{x'}\cap\{1,\ldots,n\}}Y_j
-      +\frac{\mathbf{1}\{n+1\in N_{x'}\}}{K}\,y\\
-    &=a(x';D_n,X_{n+1})+b(x';D_n,X_{n+1})\,y,
-\end{align*}
-where
-\begin{equation*}
-    \boxed{a(x';D_n,X_{n+1})
-    =\frac{1}{K}\sum_{j\in N_{x'}\cap\{1,\ldots,n\}}Y_j,
-    \qquad
-    b(x';D_n,X_{n+1})
-    =\frac{\mathbf{1}\{n+1\in N_{x'}\}}{K}.}
-\end{equation*}
-Both coefficients are independent of $y$, establishing (9.4).
+First observe the fact that the set $N(x, \mathcal{D}_{n+1}^y)$
+merely reads the set of all indices $i \in \{1, \ldots, n + 1\}$
+belonging to the $K$ points amongst $X_1, \ldots, X_{n+1}$
+who are the closest to $x$.
+Therefore, although $y$ is present in the notation,
+$N(x, \mathcal{D}_{n+1}^y)$ depends only on $x$ and the points $X_1, \ldots, X_{n+1}$.
+Therefore, by simply writing 
 
-To see explicitly why this helps, write $a_i=a(X_i;D_n,X_{n+1})$ and
-$b_i=b(X_i;D_n,X_{n+1})$. For the absolute residual score, the training
-and test scores are
 \begin{equation*}
-    S_i^{y}=|Y_i-a_i-b_i y|\quad(i\leqslant n),
-    \qquad
-    S_{n+1}^{y}=|(1-b_{n+1})y-a_{n+1}|.
+    \hat{f}(x; \mathcal{D}_{n+1}^y)
+    = \frac{1}{K}\sum_{i \in N(x, \mathcal{D}_{n+1}^y)\cap \{1, \ldots, n\}}y_i
+    + \frac{1}{K}\sum_{i \in N(x, \mathcal{D}_{n+1}^y)\cap \{n+1\}}y_i
+    = \frac{1}{K}\sum_{i \in N(x, \mathcal{D}_{n+1}^y)\cap \{1, \ldots, n\}}y_i
+    + \frac{1}{K}\chi_{\curly{n+1 \in N(x, \mathcal{D}_{n+1}^y)}}y,
 \end{equation*}
-Thus
+we see that it suffices to define 
+
 \begin{equation*}
-    \mathcal{C}(X_{n+1})
-    =\left\{y\in\mathbb{R}:
-    \frac{1+\sum_{i=1}^{n}\mathbf{1}
-    \{|Y_i-a_i-b_i y|\geqslant|(1-b_{n+1})y-a_{n+1}|\}}{n+1}
-    >\alpha\right\}.
+    a(x; \mathcal{D}_{n}, X_{n+1}) = \frac{1}{K}\sum_{i \in N(x, \mathcal{D}_{n+1}^y)\cap \{1, \ldots, n\}}y_i
 \end{equation*}
-Each comparison can change only at a solution of one of the two linear
-equations
+and 
 \begin{equation*}
-    Y_i-a_i-b_i y
-    =\pm\bigl((1-b_{n+1})y-a_{n+1}\bigr).
+    b(x; \mathcal{D}_{n}, X_{n+1}) = \frac{1}{K}\chi_{\curly{n+1 \in N(x, \mathcal{D}_{n+1}^y)}}.
 \end{equation*}
-Equations that hold identically contribute no boundary; each remaining
-equation has at most one solution. After computing the neighbor sets and
-coefficients once, there are therefore at most $2n$ candidate boundary
-points. Evaluate the p-value between consecutive boundary points and at
-the boundary points themselves to recover the exact prediction set.
-////
+This completes the proof.////
 
 \end{CJK*}
 \end{document}

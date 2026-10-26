@@ -3,70 +3,60 @@
 \begin{document}
 \begin{CJK*}{UTF8}{gbsn}
 
-\section*{Exercise 9.1}
+\section*{Exercise 1}
 
-Consider full conformal prediction with an exchangeable dataset and a
-symmetric score function. Instead of comparing the test score against
-all $n$ training scores, compare it against a random subset indexed by
-$I\subseteq\{1,\ldots,n\}$, sampled independently of the data:
+Given exchangeable data set $(X_1, Y_1), \cdots, (X_{n}, Y_{n}), (X_{n+1}, Y_{n+1})
+\in \mathcal{X} \times \mathcal{Y}$,
+level $\alpha \in (0,1)$,
+and a real valued symmetric score function $s((x,y); \mathcal{D})$
+for $(x,y) \in \mathcal{X} \times \mathcal{Y}$
+and $\mathcal{D} \in (\mathcal{X} \times \mathcal{Y})^k$
+for any $k$ being a data set,
+we carry out the full conformal prediction.
+Put, for any $y \in \mathcal{Y}$:
+
+\begin{equation*}
+    \mathcal{D}_{n+1}^y = \curly{(X_1, Y_1), \cdots, (X_{n}, Y_{n}), (X_{n+1}, y)}.
+\end{equation*}
+For simplicity, write $S_i^y = s((X_i, Y_i); \mathcal{D}_{n+1}^y)$
+for $i \in \{1, \ldots, n\}$
+and $S_{n+1}^y = s((X_{n+1}, y); \mathcal{D}_{n+1}^y)$.
+The standard conformal prediction procedure 
+asks us to compare $S_{n+1}^y$
+with the entire sequence $(S_{1}^y, \ldots, S_n^y)$.
+
+We proceed however by choosing randomly 
+a subset $I \subseteq \{1, \ldots, n\}$ 
+independent of the data 
+and compare $S_{n+1}^y$ with $(S_i^y)_{i \in I}$.
+More precisely, put:
+
 \begin{equation*}
     \mathcal{C}(X_{n+1})
-    =\left\{y\in\mathcal{Y}:S_{n+1}^{y}\leqslant
-    \operatorname{Quantile}\left((S_i^{y})_{i\in I};
-    (1-\alpha)\left(1+\frac{1}{|I|}\right)\right)\right\}.
+    =\curly{y \in \mathcal{Y} \mid S_{n+1}^{y} \leqslant
+    \text{Quantile} \bracket{(S_i^{y})_{i \in I};
+    (1-\alpha)\bracket{1+\frac{1}{|I|} } }}.
 \end{equation*}
-Prove that this modified prediction set has marginal coverage at least
-$1-\alpha$.
+Prove that 
+
+\begin{equation*}
+    P \curly{Y_{n+1} \in \mathcal{C}(X_{n+1})} \geqslant 1 - \alpha.
+\end{equation*}
 
 \paragraph{Solution}
-Let $Z_i=(X_i,Y_i)$, $D_{n+1}=(Z_1,\ldots,Z_{n+1})$, and define the
-scores at the true test response by
-\begin{equation*}
-    S_i=s(Z_i;D_{n+1}),\qquad i=1,\ldots,n+1.
-\end{equation*}
-Symmetry of $s$ and exchangeability of the data imply that
-$(S_1,\ldots,S_{n+1})$ is exchangeable. Indeed, for every permutation
-$\pi$ of the $n+1$ indices,
-\begin{equation*}
-    (S_{\pi(i)})_{i=1}^{n+1}
-    =\bigl(s(Z_{\pi(i)};(D_{n+1})_{\pi})\bigr)_{i=1}^{n+1}
-    \overset{d}{=}(S_i)_{i=1}^{n+1}.
-\end{equation*}
-The equality uses symmetry in the dataset argument, and the equality in
-distribution uses exchangeability of the data.
+Given that $I$ is independent of the data set,
+the joint distribution of 
+$((X_1, Y_1), \cdots, (X_{n}, Y_{n}), (X_{n+1}, Y_{n+1}))$
+remains the same after conditioning on $I$.
+In particular, they are still exchangeable.
+Therefore:
 
-Now condition on $I=J$, for any fixed nonempty subset $J$ having positive
-probability, and put $m=|J|$. Independence of $I$ and the data means that
-conditioning on $I=J$ does not change the distribution of the scores.
-Thus the $m$ selected scores together with $S_{n+1}$ remain exchangeable.
-Let
 \begin{equation*}
-    k_m=\lceil(m+1)(1-\alpha)\rceil.
+    P \curly{Y_{n+1} \in \mathcal{C}(X_{n+1})} = \sum P\{I = J\} P\bracket{
+        \curly{Y_{n+1} \in \mathcal{C}(X_{n+1})} \mid I = J} \geqslant \sum P\{I = J\} (1 - \alpha) = 1 - \alpha,
 \end{equation*}
-If $k_m\leqslant m$, the quantile in the question is the $k_m$th smallest
-score among $(S_i)_{i\in J}$. The exchangeable-rank argument gives
-\begin{equation*}
-    P\{Y_{n+1}\in\mathcal{C}(X_{n+1})\mid I=J\}
-    \geqslant\frac{k_m}{m+1}\geqslant1-\alpha.
-\end{equation*}
-For completeness, break any score ties uniformly at random solely for
-this rank argument. The rank of $S_{n+1}$ among the $m+1$ scores is then
-uniform on $\{1,\ldots,m+1\}$. Rank at most $k_m$ implies that
-$S_{n+1}$ is no larger than the selected-sample quantile, which proves
-the first inequality even when scores tie.
-If $k_m=m+1$, the quantile is $+\infty$ by the conformal convention,
-and the conditional coverage is $1$.
-
-Averaging the conditional guarantees over all possible subsets yields
-\begin{equation*}
-    \boxed{P\{Y_{n+1}\in\mathcal{C}(X_{n+1})\}
-    =\sum_J P(I=J)
-    P\{Y_{n+1}\in\mathcal{C}(X_{n+1})\mid I=J\}
-    \geqslant1-\alpha.}
-\end{equation*}
-If an empty subset is allowed, define its threshold to be $+\infty$ and
-return $\mathcal{Y}$ on that event; the same conclusion follows.
-Notice that $I$ need not be uniform among subsets, nor have a fixed size.
+where the summation is taken with $J$ ranged over all subsets of ${1, \ldots, n}$.
+The second inequality is Theorem 3.2 in the textbook.
 ////
 
 \end{CJK*}

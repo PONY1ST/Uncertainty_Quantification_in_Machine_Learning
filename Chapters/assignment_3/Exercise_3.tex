@@ -3,80 +3,76 @@
 \begin{document}
 \begin{CJK*}{UTF8}{gbsn}
 
-\section*{Exercise 9.3}
+\section*{Exercise 3}
 
-Fix $n\geqslant1$. Consider the naive discretization strategy (9.6),
-using a finite uniform grid $G=\{y^{(1)},\ldots,y^{(M)}\}$ over $[-B,B]$.
-Construct a distribution $P$ and a symmetric score function $s$ such
-that this approximation has zero marginal coverage for every choice
-of grid size $M$ and range $B>0$.
+Given data set $(X_1, Y_1), \cdots, (X_{n}, Y_{n}), (X_{n+1}, Y_{n+1})
+\in \mathcal{X} \times \mathcal{Y}$ with $\mathcal{Y} = \mathbb{R}$,
+level $\alpha \in (0,1)$, we discretize $[-B,B]$, where $B > 0$,
+by setting, for a positive integer $M$ and all $m \in \{1, \ldots, M\}$:
+
+\begin{equation*}
+    y^{(m)} = - B + \frac{m-1}{M-1} \times 2B.
+\end{equation*}
+Put, for any $y \in \mathcal{Y}$:
+
+\begin{equation*}
+    \mathcal{D}_{n+1}^y = \curly{(X_1, Y_1), \cdots, (X_{n}, Y_{n}), (X_{n+1}, y)}.
+\end{equation*}
+With a real valued score function $s((x,y); \mathcal{D})$
+for $(x,y) \in \mathcal{X} \times \mathcal{Y}$
+and $\mathcal{D}$ is any data set containing points from $\mathcal{X} \times \mathcal{Y}$,
+we consider a discretized conformal prediction set defined as follows.
+First of all, let $I$ be the set of all $m \in \{1, \ldots, M\}$
+such that 
+
+\begin{equation*}
+    s \bracket{(X_{n+1}, y^{(m)}); \mathcal{D}_{n+1}^{y^{(m)}}} 
+    \leqslant
+    \text{Quantile} \bracket{\curly{s \bracket{(X_{i}, Y_i); \mathcal{D}_{n+1}^{y^{(m)}}}}_{i=1}^n; 
+    (1- \alpha) \bracket{1 + \frac{1}{n}}}.
+\end{equation*}
+Then, put 
+
+\begin{equation*}
+    \mathcal{C}(X_{n+1}) = \bigcup_{m \in I} (y^{(m-1)}, y^{(m+1)}).
+\end{equation*}
+
+Construct an example of a symmetric score function $s$ and 
+a distribution $P$ of the data set 
+such that 
+
+\begin{equation*}
+    P \curly{Y_{n+1} \in \mathcal{C}(X_{n+1})} = 0
+\end{equation*}
+for any choice of $B$ and $M$.
 
 \paragraph{Solution}
-First consider the nontrivial range $\alpha\geqslant1/(n+1)$, with
-$0<\alpha<1$. The very small $\alpha$ case is addressed below.
-Take $\mathcal{X}=\mathcal{Y}=\mathbb{R}$ and define $P$ by
-\begin{equation*}
-    X\sim\operatorname{Unif}(0,1),\qquad Y=X.
-\end{equation*}
-Sample $(X_i,Y_i)$ independently from $P$ and choose
-\begin{equation*}
-    \boxed{s((x,y);D)=|y-x|.}
-\end{equation*}
-This score is symmetric because it does not depend on $D$ at all.
+We construct the example as follows.
+First of all, map the set $\mathcal{X}$ to $\mathbb{R}$ in any way one wants.
+From now on, we shall identify $\mathcal{X}$ with $\mathbb{R}$
+and we will write for simplicity $\mathcal{X} = \mathbb{R}$.
+We construct it such that the pairs $(X_i,Y_i)$ ranged over $i \in \{1, \ldots, n+1\}$
+are independent identically distributed with distribution of $X_i$'s being 
+any fixed continuous probability measure (say, standard normal) and $Y_i = X_i$.
+As of the score, we simply put
 
-For every candidate response $y$, all $n$ training scores are zero:
 \begin{equation*}
-    S_i^{y}=|Y_i-X_i|=0,\qquad i=1,\ldots,n,
+    s((x,y); \mathcal{D}) = \abs{x-y}
 \end{equation*}
-whereas the test score is $S_{n+1}^{y}=|y-X_{n+1}|$.
-Since $k=\lceil(n+1)(1-\alpha)\rceil\leqslant n$, the conformal quantile
-of the training scores is zero. Consequently, the exact full conformal
-prediction set is
-\begin{equation*}
-    \mathcal{C}_{\mathrm{full}}(X_{n+1})=\{X_{n+1}\},
-\end{equation*}
-which covers $Y_{n+1}=X_{n+1}$ with probability $1$.
+for all $(x,y)$ and all data set $\mathcal{D}$.
+Clearly, $s$ is symmetric because it does not even depend on $\mathcal{D}$.
+If $i \in \{1, \ldots, n\}$, our construction yields, almost surely, that 
 
-Now fix any finite grid $G$. Since $X_{n+1}$ is continuously distributed,
 \begin{equation*}
-    P\{X_{n+1}\in G\}
-    \leqslant\sum_{m=1}^{M}P\{X_{n+1}=y^{(m)}\}=0.
+    s \bracket{(X_{i}, Y_i); \mathcal{D}_{n+1}^{y^{(m)}}} = \abs{X_i-Y_i} = 0
 \end{equation*}
-Therefore, almost surely every grid point has strictly positive test
-score and fails the comparison against the zero calibration quantile.
-The accepted grid-index set is empty. In particular, the expansion of
-accepted grid points into intervals in (9.6) produces
+and
 \begin{equation*}
-    \mathcal{C}_{\mathrm{naive}}(X_{n+1})
-    =\bigcup_{m\in\varnothing}(y^{(m-1)},y^{(m+1)})
-    =\varnothing
-    \quad\text{almost surely}.
+    \text{Quantile} \bracket{\curly{s \bracket{(X_{i}, Y_i); \mathcal{D}_{n+1}^{y^{(m)}}}}_{i=1}^n; 
+    (1- \alpha) \bracket{1 + \frac{1}{n}}} = 0
 \end{equation*}
-Hence
-\begin{equation*}
-    \boxed{P\{Y_{n+1}\in\mathcal{C}_{\mathrm{naive}}(X_{n+1})\}=0.}
-\end{equation*}
-The same $P$ and $s$ work for every fixed finite grid, including every
-uniform grid of any resolution or range. For $M=1$, interpret the grid
-as any chosen single point; the argument is unchanged.
-
-\paragraph{The necessary restriction on $\alpha$}
-As written, the exercise omits a restriction needed for its conclusion.
-If $0<\alpha<1/(n+1)$, then
-\begin{equation*}
-    \lceil(n+1)(1-\alpha)\rceil=n+1.
-\end{equation*}
-The conformal quantile is then $+\infty$, so every grid point is
-accepted for any real-valued score function. With the boundary
-convention $y^{(0)}=-\infty$ and $y^{(M+1)}=+\infty$ from Section 9.2.3,
-\begin{equation*}
-    \mathcal{C}_{\mathrm{naive}}(X_{n+1})
-    =\bigcup_{m=1}^{M}(y^{(m-1)},y^{(m+1)})=\mathbb{R}.
-\end{equation*}
-Its coverage is $1$, making zero coverage impossible in this range.
-Thus the counterexample applies precisely when
-$\alpha\geqslant1/(n+1)$, or equivalently when the conformal threshold
-is a finite calibration order statistic.
+Therefore, $I = \emptyset$ and $\mathcal{C}(X_{n+1}) = \emptyset$
+for all choice of $M$ and all choice of $B$.
 ////
 
 \end{CJK*}

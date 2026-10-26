@@ -3,55 +3,61 @@
 \begin{document}
 \begin{CJK*}{UTF8}{gbsn}
 
-\section*{Exercise 9.4}
+\section*{Exercise 4}
 
-Let $A$ be a regression algorithm that takes an ordered dataset $D$ of
-size $m$ and returns $\hat{f}(\cdot;D)$, without assuming symmetry.
-Let $\xi\sim\operatorname{Unif}[0,1]$ and choose a map
-$\xi\mapsto\sigma_{\xi}\in\mathfrak{S}_m$ such that $\sigma_{\xi}$ is
-uniform among all permutations. Define
+For a data set $\mathcal{D} = ((X_1,Y_1), \ldots, (X_m, Y_m)) \in (\mathcal{X} \times \mathcal{Y})^m$,
+where $\mathcal{Y} = \mathbb{R}$, and any permutation $\sigma \in S_m$, put 
+
 \begin{equation*}
-    s((x,y);D,\xi)=|y-\hat{f}(x;D_{\sigma_{\xi}})|.
+    \mathcal{D}_{\sigma} = ((X_{\sigma(1)},Y_{\sigma(1)}), \ldots, (X_{\sigma(m)}, Y_{\sigma(m)})).
 \end{equation*}
-Prove that $s$ is a symmetric randomized score function in the sense
-of Definition 9.1.
+Given model $\hat{f}(x; \mathcal{D})$,
+we construct a randomized score function $s((x,y); \mathcal{D}, \xi)$,
+where $\xi$ is a random variable independent of the data set,
+as follows.
+Let $\sigma_{\xi}$ be an $S_m$-valued random variable 
+depending only on $\xi$ that has the uniform distribution on $S_m$
+if $\xi$ has the uniform distribution on $[0,1]$.
+Put 
+
+\begin{equation*}
+    s((x,y); \mathcal{D}, \xi) = \abs{y - \hat{f}(x; \mathcal{D}_{\sigma_{\xi}})}
+\end{equation*}
+for all $(x,y)$ and all values of $\xi$.
+Prove that $s$ is a symmetric score function in the following sense:
+for every fixed test points $(x_1^{'}, y_1^{'}), \cdots, (x_{m'}^{'}, y_{m'}^{'})$
+and every $\tau \in S_m$,
+the vector 
+
+\begin{equation*}
+    \bracket{s\bracket{(x_1^{'}, y_1^{'}); \mathcal{D}, \xi}, \ldots, s\bracket{(x_{m'}^{'}, y_{m'}^{'}); \mathcal{D}, \xi}} 
+    \in \mathbb{R}^{m'}
+\end{equation*}
+has the same distribution as 
+\begin{equation*}
+    \bracket{s\bracket{(x_1^{'}, y_1^{'}); \mathcal{D}_{\tau}, \xi}, \ldots, 
+    s\bracket{(x_{m'}^{'}, y_{m'}^{'}); \mathcal{D}_{\tau}, \xi}} 
+    \in \mathbb{R}^{m'}
+\end{equation*}
+when $\xi$ has the uniform distribution on $[0,1]$.
 
 \paragraph{Solution}
-Fix any dataset $D=(z_1,\ldots,z_m)$ and any permutation
-$\pi\in\mathfrak{S}_m$, where $z_j=(x_j,y_j)$.
-If $\sigma\in\mathfrak{S}_m$, then
-\begin{equation*}
-    (D_{\pi})_{\sigma}
-    =(z_{\pi(\sigma(1))},\ldots,z_{\pi(\sigma(m))})
-    =D_{\pi\circ\sigma}.
-\end{equation*}
-The map $\sigma\mapsto\pi\circ\sigma$ is a bijection of
-$\mathfrak{S}_m$, with inverse $\rho\mapsto\pi^{-1}\circ\rho$.
-Thus composing a uniform random permutation with the fixed permutation
-$\pi$ preserves its uniform distribution:
-\begin{equation*}
-    \pi\circ\sigma_{\xi}\overset{d}{=}\sigma_{\xi}.
-\end{equation*}
-In particular, shuffling $D_{\pi}$ uniformly has the same distribution
-as shuffling $D$ uniformly.
+For each $i \in \{1, \ldots, m'\}$,
+the random variable 
 
-To verify the full requirement of Definition 9.1, fix any finite list
-of evaluation points $(x'_1,y'_1),\ldots,(x'_r,y'_r)$ and define
 \begin{equation*}
-    F(\rho)=\bigl(|y'_j-\hat{f}(x'_j;D_{\rho})|\bigr)_{j=1}^{r},
-    \qquad\rho\in\mathfrak{S}_m.
+    s\bracket{(x_i^{'}, y_i^{'}); \mathcal{D}, \xi}
+    = \abs{y_i^{'} - \hat{f}(x_i^{'}; \mathcal{D}_{\sigma_{\xi}})}
 \end{equation*}
-Using the same random seed for all $r$ scores, we obtain
-\begin{align*}
-    \bigl(s((x'_j,y'_j);D_{\pi},\xi)\bigr)_{j=1}^{r}
-    &=F(\pi\circ\sigma_{\xi})\\
-    &\overset{d}{=}F(\sigma_{\xi})\\
-    &=\bigl(s((x'_j,y'_j);D,\xi)\bigr)_{j=1}^{r}.
-\end{align*}
-This proves equality in distribution of the entire score vector for
-arbitrary evaluation points and any permutation of $D$, exactly as
-required by Definition 9.1. No symmetry of $A$ is needed: the random
-shuffle gives every possible ordering of the data the same probability.
+has the same distribution as 
+
+\begin{equation*}
+    \abs{y_i^{'} - \hat{f}(x_i^{'}; \mathcal{D}_{\tau \circ \sigma_{\xi}})}
+    = s\bracket{(x_i^{'}, y_i^{'}); \mathcal{D}_{\tau}, \xi}
+\end{equation*}
+as long as $\xi$ has the uniform distribution on $[0,1]$
+because, by construction, both $\sigma_{\xi}$ and $\tau \circ \sigma_{\xi}$
+have uniform distribution on $S_m$.
 ////
 
 \end{CJK*}
