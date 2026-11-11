@@ -1,0 +1,6 @@
+[submodule "Benjamini_Hochberg_Presentation"]
+	path = Benjamini_Hochberg_Presentation
+	url = https://github.com/PONY1ST/Benjamini_Hochberg_Presentation.git
+[submodule "Exchangeable_Hypothesis_Project"]
+	path = Exchangeable_Hypothesis_Project
+	url = https://github.com/PONY1ST/Exchangeable_Hypothesis_Project.git
